@@ -36,10 +36,41 @@ public class League {
 	}
 	
 	public void printArray() {
-		for (Player p : playersList) {
-			System.out.println("Name: " + p.getName() + "\t Wins: " 
-					+ p.getWins() + "\t Losses: " + p.getLosses() + "\t Played: " 
-						+ p.getPlayed() + "\t Rank: " + p.getRank());
+		
+		int response = 0;
+		double temp1 = 0.0;
+		double temp2 = 0.0;
+		
+		System.out.print("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most losses");
+		response = sc.nextInt();
+		
+		if (response == 1) {
+			Collections.sort(playersList, Players_Rank);
+			for (Player p : playersList) {
+				System.out.println("Name: " + p.getName() + "\t Wins: " 
+									+ p.getWins() + "\t Losses: " + p.getLosses() + "\t Played: " 
+										+ p.getPlayed() + "\t Rank: " + p.getRank());
+			}
+		}
+		else if (response == 2) {
+			Collections.sort(playersList, Players_Wins);
+			for (Player p : playersList) {
+				temp1 = p.getPlayed();
+				temp2 = p.getWins();
+				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
+						            + "\t Losses: " + p.getLosses() + "\t Win Ratio: " 
+						            	+ temp2 / temp1);
+			}
+		}
+		else if (response == 3) {
+			Collections.sort(playersList, Players_Losses);
+			for (Player p : playersList) {
+				temp1 = p.getPlayed();
+				temp2 = p.getLosses();
+				System.out.println("Name: " + p.getName() + "\t Losses: " + p.getLosses() 
+									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: "
+										+ temp1 / temp2);
+			}
 		}
 	}
 	
@@ -173,7 +204,7 @@ public class League {
 		
 	}
 	
-	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
+	final static Comparator<Player> Players_Rank = new Comparator<Player>() {
 		public int compare(Player a, Player b) {
 			if (a.getRank() > b.getRank()) {
 				return 1;
@@ -182,6 +213,34 @@ public class League {
 				return 0;
 			}
 			else  {
+				return -1;
+			}
+		}
+	};
+	
+	final static Comparator<Player> Players_Wins = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getWins() < b.getWins()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+	};
+	
+	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getLosses() < b.getLosses()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
 				return -1;
 			}
 		}

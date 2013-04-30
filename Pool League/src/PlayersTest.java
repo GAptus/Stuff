@@ -34,7 +34,6 @@ public class PlayersTest {
 				}
 			}
 			else if (temp == 2) {  // print
-				myLeague.sortArray();
 				myLeague.printArray();
 			}
 			else if (temp == 3) {  // add

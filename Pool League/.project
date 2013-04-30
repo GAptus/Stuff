@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Resources/PoolLeague</name>
+			<type>1</type>
+			<location>/home/giacomo/Hello-World/Pool League/PoolLeague</location>
+		</link>
+	</linkedResources>
 </projectDescription>
