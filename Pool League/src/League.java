@@ -41,6 +41,7 @@ public class League {
 		double temp1 = 0.0;
 		double temp2 = 0.0;
 		
+		
 		System.out.print("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most losses");
 		response = sc.nextInt();
 		
@@ -55,21 +56,23 @@ public class League {
 		else if (response == 2) {
 			Collections.sort(playersList, Players_Wins);
 			for (Player p : playersList) {
+				String s = "";
 				temp1 = p.getPlayed();
 				temp2 = p.getWins();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
 				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
-						            + "\t Losses: " + p.getLosses() + "\t Win Ratio: " 
-						            	+ temp2 / temp1);
+						            + "\t Losses: " + p.getLosses() + "\t Win Ratio: " + s); 
 			}
 		}
 		else if (response == 3) {
 			Collections.sort(playersList, Players_Losses);
 			for (Player p : playersList) {
+				String s = "";
 				temp1 = p.getPlayed();
 				temp2 = p.getLosses();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
 				System.out.println("Name: " + p.getName() + "\t Losses: " + p.getLosses() 
-									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: "
-										+ temp1 / temp2);
+									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: " + s);
 			}
 		}
 	}
