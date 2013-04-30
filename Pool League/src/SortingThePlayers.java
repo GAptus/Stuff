@@ -45,7 +45,7 @@ public class SortingThePlayers {
 	}
 	
 	private void swapRanks() {
-		
+		//ofajoiegfjoijgfo
 	}
 	
 	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
