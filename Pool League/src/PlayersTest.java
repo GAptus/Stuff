@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.*;
 
 public class PlayersTest {
@@ -8,7 +9,13 @@ public class PlayersTest {
 		
 		boolean running = true;
 		
-		myLeague.initialiseForTesting();
+		try {
+			myLeague.initialiseForTesting();
+		}
+		catch (IOException e) {
+			System.out.println("File Missing");
+			System.exit(0);
+		}
 		
 		while(running) {
 			int temp = 0;
@@ -21,6 +28,9 @@ public class PlayersTest {
 				}
 				catch (PlayerNotFoundException e) {
 					System.out.println("One or more of your players cannot be found");
+				}
+				catch (IOException e) {
+					System.out.println("There is somethign wrong with the file");
 				}
 			}
 			else if (temp == 2) {  // print
@@ -46,8 +56,12 @@ public class PlayersTest {
 				else {
 					addPlayer = new Player(0, 0, 1, tempName);
 				}
-				
-				myLeague.addPlayer(addPlayer);
+				try {
+					myLeague.addPlayer(addPlayer);
+				}
+				catch (IOException e) {
+					System.out.println("There is a problem with the files");
+				}
 			}
 			else if (temp == 4) {   // remove a player
 				String tempName = null;
@@ -57,7 +71,12 @@ public class PlayersTest {
 				
 				Player removePlayer = new Player(myLeague.findPlayerByName(tempName));
 				
-				myLeague.removePlayer(removePlayer);
+				try {
+					myLeague.removePlayer(removePlayer);
+				}
+				catch (IOException e) {
+					System.out.println("There is a problem with the files");
+				}
 			}
 			else if (temp == 5) {  // exit
 				System.exit(0);

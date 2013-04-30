@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.io.*;
 
 
 public class League {
@@ -8,16 +9,20 @@ public class League {
 	
 	Scanner sc = new Scanner(System.in);
 	
-	public void addPlayer(Player p) {
+	public void addPlayer(Player p) throws IOException {
 		playersList.add(p);
+		
+		saveFiles();
 	}
 	
-	public void addPlayer(int wins, int losses, int rank, String name) {
+	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
 		Player p = new Player(wins, losses, rank, name);
 		playersList.add(p);
+		
+		saveFiles();
 	}
 	
-	public void removePlayer(Player p) throws PlayerNotFoundException {
+	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
 		int tempRank = p.getRank();
 		playersList.remove(p);
 		
@@ -26,11 +31,15 @@ public class League {
 				r.moveUpRank();
 			}				
 		}
+		
+		saveFiles();
 	}
 	
 	public void printArray() {
-		for (int i = 0; i < playersList.size(); i++) {
-			System.out.println(playersList.get(i));
+		for (Player p : playersList) {
+			System.out.println("Name: " + p.getName() + "\t Wins: " 
+					+ p.getWins() + "\t Losses: " + p.getLosses() + "\t Played: " 
+						+ p.getPlayed() + "\t Rank: " + p.getRank());
 		}
 	}
 	
@@ -39,7 +48,7 @@ public class League {
 		Collections.sort(playersList, Players_Losses);
 	}
 	
-	public void playGame() throws PlayerNotFoundException {
+	public void playGame() throws PlayerNotFoundException, IOException {
 		String winner, loser;
 		System.out.print("Enter the winner: ");
 		winner = sc.next();
@@ -52,7 +61,7 @@ public class League {
 		swapPlayerRanks(winnerPlayer, loserPlayer);
 	}
 	
-	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException {
+	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException, IOException {
 		
 		if (winner.getRank() > loser.getRank()) {
 			if (winner.getRank() - 1 == loser.getRank()) {
@@ -92,6 +101,8 @@ public class League {
 			loser.AddToLosses();
 		}
 		
+		saveFiles();
+		
 	}
 	
 	// searches the arrayList for players whose name is equal to the name given as a parameter. If no match is found it will throw PlayerNotFoundException
@@ -113,18 +124,54 @@ public class League {
 		throw new PlayerNotFoundException();
 	}
 	
-	public void initialiseForTesting() {
-		for (int i = 0; i < 6; i++) {
-			int wins = (int)(Math.random() * 60);
-			int loses = (int)(Math.random() * 60);
-			int rank = i + 1;
-			String name = UUID.randomUUID().toString();
-			
-			playersList.add(new Player(wins, loses, rank, name));
-		}
+	public void initialiseForTesting() throws IOException {
+		readFile();
 	}
 	
+	private void saveFiles() throws IOException {
+		FileWriter f1 = new FileWriter("PoolLeague");
+		String temp = "";
+		char[] tempChars;
+		
+		for (Player p : playersList) {
+			temp += p + "\n";
+		}
+		
+		tempChars = new char[temp.length()];
+		tempChars = temp.toCharArray();
+		f1.write(tempChars);
+		f1.close();
+	}
 	
+	private void readFile() throws IOException {
+		
+		String[] parts = new String[4];
+		int count = 1;
+		String s;
+		
+		try {
+			FileReader f1 = new FileReader("PoolLeague");
+			BufferedReader br = new BufferedReader(f1);
+			
+			while ((s = br.readLine()) != null) {
+				parts = s.split(",");
+				
+				if (parts.length < 4) {
+					System.out.println("Your are missing " + (4 - parts.length) + " values from line" + count);
+					System.exit(0);
+				}
+				else {
+					playersList.add(new Player(parts));
+				}
+			}
+			br.close();
+			f1.close();
+		}
+		catch (IOException e) {
+			System.out.println("Your file is missing!");
+		}	
+		
+	}
 	
 	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
 		public int compare(Player a, Player b) {
