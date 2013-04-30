@@ -42,14 +42,14 @@ public class League {
 		double temp2 = 0.0;
 		
 		
-		System.out.print("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most losses");
+		System.out.print("Enter 1 to see the league table, 2 to see who has most wins, 3 to see who has most losses and 4 to compare ratio's");
 		response = sc.nextInt();
 		
 		if (response == 1) {
 			Collections.sort(playersList, Players_Rank);
 			for (Player p : playersList) {
 				System.out.println("Name: " + p.getName() + "\t Wins: " 
-									+ p.getWins() + "\t Losses: " + p.getLosses() + "\t Played: " 
+									+ p.getWins() + "\t Loses: " + p.getLosses() + "\t Played: " 
 										+ p.getPlayed() + "\t Rank: " + p.getRank());
 			}
 		}
@@ -61,7 +61,7 @@ public class League {
 				temp2 = p.getWins();
 				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
 				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
-						            + "\t Losses: " + p.getLosses() + "\t Win Ratio: " + s); 
+						            + "\t Loses: " + p.getLosses() + "\t Win Ratio: " + s); 
 			}
 		}
 		else if (response == 3) {
@@ -71,8 +71,21 @@ public class League {
 				temp1 = p.getPlayed();
 				temp2 = p.getLosses();
 				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
-				System.out.println("Name: " + p.getName() + "\t Losses: " + p.getLosses() 
+				System.out.println("Name: " + p.getName() + "\t Loses: " + p.getLosses() 
 									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: " + s);
+			}
+		}
+		else if (response == 4) {
+			Collections.sort(playersList,  Players_Rank);
+			for (Player p : playersList) {
+				String s = "";
+				String s1 = "";
+				temp1 = p.getPlayed();
+				temp2 = p.getWins();
+				double temp3 = p.getLosses();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
+				s1 += (p.getPlayed() == 0) ? s1 = "No Games played" : temp3 / temp1;
+				System.out.printf("%-15s%-30s%-50s %n","Name: " + p.getName(), "Win Ratio: " + s, " Loss Ratio: " + s1);
 			}
 		}
 	}
@@ -248,5 +261,4 @@ public class League {
 			}
 		}
 	};
-
 }
