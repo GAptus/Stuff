@@ -13,8 +13,35 @@ public class Player implements Comparable<Player> {
 		this.name = name;
 	}
 	
+	Player(Player p) {
+		this.wins = p.wins;
+		this.losses = p.losses;
+		this.rank = p.rank;
+		this.name = p.name;
+	}
+	
+	public void AddToWins() {
+		wins++;
+	}
+	
+	public void AddToLosses() {
+		losses++;
+	}
+	
+	public void moveDownRank() {
+		rank++;
+	}
+	
+	public void moveUpRank() {
+		rank--;
+	}
+	
 	public int compareTo(Player p) {
 		return p.wins.compareTo(wins);
+	}
+	
+	public int getWins() {
+		return wins;
 	}
 	
 	public int getLosses() {
@@ -30,6 +57,6 @@ public class Player implements Comparable<Player> {
 	}
 	
 	public String toString() {
-		return "Wins: " + wins + " Losses: " + losses + " Rank: " + rank;
+		return "Name: " + name + " Wins: " + wins + " Losses: " + losses + " Rank: " + rank;
 	}
 }
