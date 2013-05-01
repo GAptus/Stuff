@@ -7,6 +7,10 @@ public class PlayersTest {
 		League myLeague = new League();
 		Scanner sc = new Scanner(System.in);
 		
+		
+		
+		
+		
 		boolean running = true;
 		
 		try {
