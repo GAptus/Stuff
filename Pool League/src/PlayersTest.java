@@ -38,32 +38,41 @@ public class PlayersTest {
 				// of the menu code and call individual methods within the league class
 				// 
 				
-				myLeague.printArray();
+				int response = 0;
+				
+				System.out.println("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most loses");
+				
+				response = sc.nextInt();
+				
+				if (response == 1) {
+					for (String s : myLeague.printArrayLeague()) {
+						System.out.println(s);
+					}
+				}
+				else if (response == 2) {
+					for (String s : myLeague.printArrayByWins()) {
+						System.out.println(s);
+					}
+				}
+				else if (response == 3) {
+					for (String s : myLeague.printArrayByLoses()) {
+						System.out.println(s);
+					}
+				}
+				else {
+					
+				}
 				
 			}
 			else if (temp == 3) {  // add
 				String tempName = null;
-				int tempRank = 0;
 				
-				// TODO simplify menu code after re-writing addPlayer method
-				
-				Player addPlayer;
-				
+
 				System.out.print("Enter the name of the player ");
 				tempName = sc.next();
 				
-				if (myLeague.playersList.size() != 0) {
-					myLeague.sortArray();
-					Player tempPlayer = myLeague.playersList.get(myLeague.playersList.size() - 1);
-					tempRank = tempPlayer.getRank() + 1;
-					
-					addPlayer = new Player(0, 0, tempRank, tempName);
-				}
-				else {
-					addPlayer = new Player(0, 0, 1, tempName);
-				}
 				try {
-					myLeague.addPlayer(addPlayer);
+					myLeague.addPlayer(tempName);
 				}
 				catch (IOException e) {
 					System.out.println("There is a problem with the files");
@@ -75,9 +84,6 @@ public class PlayersTest {
 				System.out.print("Enter the name of the player ");
 				tempName = sc.next();
 				
-				
-				// TODO get name of player from user.
-				// pass into removePlayer method
 				
 				
 				Player removePlayer = new Player(myLeague.findPlayerByName(tempName));

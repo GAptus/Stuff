@@ -11,10 +11,17 @@ import java.io.*;
 public class League {
 	
 	//TODO make private
-	ArrayList<Player> playersList = new ArrayList<Player>();
+	private ArrayList<Player> playersList = new ArrayList<Player>();
 	
 	Scanner sc = new Scanner(System.in);
 	
+	public int getSizeOfPlayersList() {
+		return playersList.size();
+	}
+	
+	public Player getPlayerFromPlayersList(int position) {
+		return playersList.get(position);
+	}
 	/**
 	 * 
 	 * @param p accepts a Player object 
@@ -23,18 +30,27 @@ public class League {
 	 * It will then call on 
 	 * saveFiles() to save the file to the text document containing a list of the players
 	 */
-	public void addPlayer(Player p) throws IOException {
+	public String addPlayer(String name) throws IOException {
 		// takes argument for player name, etc
 		// calculates rank etc and adds into the array
 		// must handle case of trying to add a new player who has the same name as a
 		// player already in the database and throw an exception if the new player cannot be added
 		
-		playersList.add(p);
+		boolean exists = false;
 		
-		saveFiles();
+		for (Player p : playersList) {
+			if (p.getName().equals(name)) {
+				exists = true;
+			}
+		}
 		
-		
-		
+		if (exists) {
+			return "Players exists, please change name to a unique one"; 
+		}
+		else {
+			playersList.add(new Player(0, 0, playersList.size() + 1, name));
+			return "Player successfully added!";
+		}
 	}
 	
 	/**
@@ -77,72 +93,79 @@ public class League {
 		
 		saveFiles();
 	}
-	
 	/**
-	 * Prints out the ArrayList data in different ways based on user input
+	 * 
+	 * @return String array which can be called and printed in PlayersTest class
 	 */
-	public void printArray() {
+	public String[] printArrayLeague() {
 		// separate each of these printing/sorting schemes into individual methods.
 		// each method should return a string of the results, which can then be handled (e.g. printed)
 		// via the calling code
-	
 		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
 		
+		Collections.sort(playersList, Players_Rank);
 		
-		int response = 0;
-		double temp1 = 0.0;
-		double temp2 = 0.0;
-		
-		
-		System.out.print("Enter 1 to see the league table, 2 to see who has most wins, 3 to see who has most losses and 4 to compare ratio's");
-		response = sc.nextInt();
-		
-		if (response == 1) {
-			Collections.sort(playersList, Players_Rank); // sorts by rank 
-			for (Player p : playersList) {
-				System.out.println("Name: " + p.getName() + "\t Wins: " 
-									+ p.getWins() + "\t Loses: " + p.getLosses() + "\t Played: " 
-										+ p.getPlayed() + "\t Rank: " + p.getRank());
-			}
+		for (Player p : playersList) {
+			printPlayers[count] = "Name: " + p.getName() + "\t Loses: " + p.getLosses() + "\t Played: " + p.getPlayed()
+									+ "\t Rank: " + p.getRank();
+			
+			count++;
 		}
-		else if (response == 2) {
-			Collections.sort(playersList, Players_Wins); // sorts by wins
-			for (Player p : playersList) {
-				String s = "";
-				temp1 = p.getPlayed();
-				temp2 = p.getWins();
-				// checks if Player p has played any games and modifies the String s appropriately
-				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1; 
-				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
-						            + "\t Loses: " + p.getLosses() + "\t Win Ratio: " + s); 
-			}
+		
+		return printPlayers;
+		
+	}
+	/**
+	 * 
+	 * @return String array which can be called and printed in PlayersTest class
+	 */
+	public String[] printArrayByWins() {
+		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
+		
+		Collections.sort(playersList, Players_Wins);
+		
+		for (Player p : playersList) {
+			String s = "";
+			
+			s += (p.getPlayed() == 0) ? "No Games Played" : (p.getWins() / p.getPlayed());
+			
+			printPlayers[count] = "Name: " + p.getName()  + "\t Loses: " + p.getLosses() + "\t Wins: " + p.getWins()
+									+ "\t Win Ratio: " + s;
+			
+			count++;
 		}
-		else if (response == 3) {
-			Collections.sort(playersList, Players_Losses); // sorts by losses
-			for (Player p : playersList) {
-				String s = "";
-				temp1 = p.getPlayed();
-				temp2 = p.getLosses();
-				// checks if Player p has played any games and modifies the String s appropriately
-				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
-				System.out.println("Name: " + p.getName() + "\t Loses: " + p.getLosses() 
-									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: " + s);
-			}
+		
+		return printPlayers;
+		
+	}
+	/**
+	 * 
+	 * @return String array which can be called and printed in PlayersTest Class
+	 */
+	public String[] printArrayByLoses() {
+		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
+		
+		Collections.sort(playersList, Players_Losses);
+		
+		for (Player p : playersList) {
+			String s = "";
+			
+			s += (p.getPlayed() == 0) ? "No Games Played" : (p.getLosses() / p.getPlayed());
+			
+			printPlayers[count] = "Name: " + p.getName() + "\t Wins: " + p.getWins() + "\t Loses: " + p.getLosses() 
+									+ "\t Lose Ratio: " + s;
+			
+			count++;
 		}
-		else if (response == 4) {
-			Collections.sort(playersList,  Players_Rank); //sorts by rank
-			for (Player p : playersList) {
-				String s = "";
-				String s1 = "";
-				temp1 = p.getPlayed();
-				temp2 = p.getWins();
-				double temp3 = p.getLosses();
-				// checks if Player p has played any games and modifies the String s and String s1 appropriately
-				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
-				s1 += (p.getPlayed() == 0) ? s1 = "No Games played" : temp3 / temp1;
-				System.out.printf("%-15s%-30s%-50s %n","Name: " + p.getName(), "Win Ratio: " + s, " Loss Ratio: " + s1);
-			}
-		}
+		
+		return printPlayers;
+		
 	}
 	/**
 	 * 
@@ -163,6 +186,9 @@ public class League {
 		Player loserPlayer = findPlayerByName(loser);
 		
 		swapPlayerRanks(winnerPlayer, loserPlayer);
+		
+		saveGames(winner, loser);
+		
 	}
 	/**
 	 * 
@@ -249,6 +275,7 @@ public class League {
 		}
 		throw new PlayerNotFoundException();
 	}
+
 	/**
 	 * 
 	 * @throws IOException
@@ -256,6 +283,31 @@ public class League {
 	 */
 	public void initialiseForTesting() throws IOException {
 		readFile();
+	}
+	
+	private void saveGames(String winner, String loser) throws IOException {
+		
+		
+		Date thisDate = new Date();
+		FileReader fr = new FileReader("PreviousGames");
+		BufferedReader br  = new BufferedReader(fr);
+		FileWriter f1 = new FileWriter("PreviousGames", true);
+		
+		String temp = "";
+		
+		temp = thisDate.toString() + " " + winner + " beats " + loser;
+		
+		if (br.readLine() == null) {
+			f1.write(temp);
+		}
+		else {
+			f1.write("\n");
+			f1.write(temp);
+		}
+		
+		fr.close();
+		br.close();
+		f1.close();
 	}
 	/**
 	 * 
