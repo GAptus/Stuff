@@ -31,11 +31,7 @@ public class League {
 	 * saveFiles() to save the file to the text document containing a list of the players
 	 */
 	public String addPlayer(String name) throws IOException {
-		// takes argument for player name, etc
-		// calculates rank etc and adds into the array
-		// must handle case of trying to add a new player who has the same name as a
-		// player already in the database and throw an exception if the new player cannot be added
-		
+
 		boolean exists = false;
 		
 		for (Player p : playersList) {
@@ -77,9 +73,6 @@ public class League {
 	 * removes a player based upon the object entered
 	 */
 	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
-		// TODO takes name of player as a string
-		// if player name exists remove from league
-		// throws a PlayerNotFound exception if we can't locate the player to remove
 		
 		int tempRank = p.getRank();
 		playersList.remove(p);
@@ -98,9 +91,6 @@ public class League {
 	 * @return String array which can be called and printed in PlayersTest class
 	 */
 	public String[] printArrayLeague() {
-		// separate each of these printing/sorting schemes into individual methods.
-		// each method should return a string of the results, which can then be handled (e.g. printed)
-		// via the calling code
 		
 		String[] printPlayers = new String[playersList.size()];
 		int count = 0;

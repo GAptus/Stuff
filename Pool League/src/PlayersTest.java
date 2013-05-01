@@ -34,10 +34,7 @@ public class PlayersTest {
 				}
 			}
 			else if (temp == 2) {  // print
-				// present options for which type of printing to perform at this level
-				// of the menu code and call individual methods within the league class
-				// 
-				
+
 				int response = 0;
 				
 				System.out.println("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most loses");
