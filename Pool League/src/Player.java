@@ -1,5 +1,9 @@
 
-
+/**	@author giacomo
+ * @version 1.4
+ *  Player Class represents player <p>
+ * Stores information for a player
+ */
 public class Player implements Comparable<Player> {
 	
 	private Integer wins;
@@ -8,6 +12,14 @@ public class Player implements Comparable<Player> {
 	private String name;
 	private int played;
 	
+	/**
+	 * 
+	 * @param wins wins
+	 * @param losses Stores loses
+	 * @param rank Stores current rank
+	 * @param name Stores name
+	 *	
+	 */
 	Player(int wins, int losses, int rank, String name) {
 		this.wins = wins;
 		this.losses = losses;
@@ -15,7 +27,9 @@ public class Player implements Comparable<Player> {
 		this.name = name;
 		played = wins + losses;
 	}
-	
+	/**
+	 * @param p stores a Player
+	 */
 	Player(Player p) {
 		this.wins = p.wins;
 		this.losses = p.losses;
@@ -23,7 +37,10 @@ public class Player implements Comparable<Player> {
 		this.name = p.name;
 		played = wins + losses;
 	}
-	
+	/**
+	 * 
+	 * @param s Stores a array of Strings
+	 */
 	Player(String[] s) {
 		wins = Integer.parseInt(s[0]);
 		losses = Integer.parseInt(s[1]);
@@ -31,47 +48,76 @@ public class Player implements Comparable<Player> {
 		name = s[3];
 		played = wins + losses;
 	}
-	
+	/**
+	 * Increments wins by 1
+	 */
 	public void AddToWins() {
 		wins++;
 	}
-	
+	/**
+	 * Decrements losses by 1
+	 */
 	public void AddToLosses() {
 		losses++;
 	}
-	
+	/**
+	 * Increments rank by 1 
+	 */
 	public void moveDownRank() {
 		rank++;
 	}
-	
+	/**
+	 * Decrements rank by 1
+	 */
 	public void moveUpRank() {
 		rank--;
 	}
-	
+	/**
+	 * @param p Stores a Player object
+	 * Compares wins between two Player objects this & another
+	 */
 	public int compareTo(Player p) {
 		return p.wins.compareTo(wins);
 	}
-	
+	/**
+	 * 
+	 * @return the value of played, stores the number of games played by a player
+	 */
 	public int getPlayed() {
 		return played;
 	}
-	
+	/**
+	 * 
+	 * @return the value of wins, stores the number of wins by a player
+	 */
 	public int getWins() {
 		return wins;
 	}
-	
+	/**
+	 * 
+	 * @return the value of losses, stores the number of loses by a player
+	 */
 	public int getLosses() {
 		return losses;
 	}
-	
+	/**
+	 * 
+	 * @return the value of name, stores the name of a player
+	 */
 	public String getName() {
 		return name;
 	}
-	
+	/**
+	 * 
+	 * @return the value of rank, stores the current rank of a player
+	 */
 	public int getRank() {
 		return rank;
 	}
-	
+	/**
+	 * 
+	 * @return a string, this string holds the raw format of the player data which gets stored in a .txt file
+	 */
 	public String toString() {
 		return wins + "," + losses + "," + rank + "," + name;
 	}

@@ -30,7 +30,7 @@ public class PlayersTest {
 					System.out.println("One or more of your players cannot be found");
 				}
 				catch (IOException e) {
-					System.out.println("There is somethign wrong with the file");
+					System.out.println("There is something wrong with the file");
 				}
 			}
 			else if (temp == 2) {  // print
