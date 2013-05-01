@@ -2,7 +2,12 @@
 import java.util.*;
 import java.io.*;
 
-
+/**
+ * 
+ * @author giacomo
+ *@version 1.4
+ *Class League stores a list of Player objects and provides different methods for handling and sorting them
+ */
 public class League {
 	
 	//TODO make private
@@ -10,6 +15,14 @@ public class League {
 	
 	Scanner sc = new Scanner(System.in);
 	
+	/**
+	 * 
+	 * @param p accepts a Player object 
+	 * @throws IOException 
+	 * This method will add in the PLayer object supplied in the parameter to the List
+	 * It will then call on 
+	 * saveFiles() to save the file to the text document containing a list of the players
+	 */
 	public void addPlayer(Player p) throws IOException {
 		// takes argument for player name, etc
 		// calculates rank etc and adds into the array
@@ -24,6 +37,15 @@ public class League {
 		
 	}
 	
+	/**
+	 * 
+	 * @param wins
+	 * @param losses
+	 * @param rank
+	 * @param name
+	 * @throws IOException
+	 * Overridden method of addPlayer, accepts a range of primitives used to construct a Player object
+	 */
 	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
 		Player p = new Player(wins, losses, rank, name);
 		playersList.add(p);
@@ -31,6 +53,13 @@ public class League {
 		saveFiles();
 	}
 	
+	/**
+	 * 
+	 * @param p
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * removes a player based upon the object entered
+	 */
 	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
 		// TODO takes name of player as a string
 		// if player name exists remove from league
@@ -39,6 +68,7 @@ public class League {
 		int tempRank = p.getRank();
 		playersList.remove(p);
 		
+		// This loop checks where in the list the Player was located and remedies the ranks of player above it
 		for (Player r : playersList) {
 			if (r.getRank() > tempRank) {
 				r.moveUpRank();
@@ -48,6 +78,9 @@ public class League {
 		saveFiles();
 	}
 	
+	/**
+	 * Prints out the ArrayList data in different ways based on user input
+	 */
 	public void printArray() {
 		// separate each of these printing/sorting schemes into individual methods.
 		// each method should return a string of the results, which can then be handled (e.g. printed)
@@ -65,7 +98,7 @@ public class League {
 		response = sc.nextInt();
 		
 		if (response == 1) {
-			Collections.sort(playersList, Players_Rank);
+			Collections.sort(playersList, Players_Rank); // sorts by rank 
 			for (Player p : playersList) {
 				System.out.println("Name: " + p.getName() + "\t Wins: " 
 									+ p.getWins() + "\t Loses: " + p.getLosses() + "\t Played: " 
@@ -73,47 +106,52 @@ public class League {
 			}
 		}
 		else if (response == 2) {
-			Collections.sort(playersList, Players_Wins);
+			Collections.sort(playersList, Players_Wins); // sorts by wins
 			for (Player p : playersList) {
 				String s = "";
 				temp1 = p.getPlayed();
 				temp2 = p.getWins();
-				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
+				// checks if Player p has played any games and modifies the String s appropriately
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1; 
 				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
 						            + "\t Loses: " + p.getLosses() + "\t Win Ratio: " + s); 
 			}
 		}
 		else if (response == 3) {
-			Collections.sort(playersList, Players_Losses);
+			Collections.sort(playersList, Players_Losses); // sorts by losses
 			for (Player p : playersList) {
 				String s = "";
 				temp1 = p.getPlayed();
 				temp2 = p.getLosses();
+				// checks if Player p has played any games and modifies the String s appropriately
 				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
 				System.out.println("Name: " + p.getName() + "\t Loses: " + p.getLosses() 
 									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: " + s);
 			}
 		}
 		else if (response == 4) {
-			Collections.sort(playersList,  Players_Rank);
+			Collections.sort(playersList,  Players_Rank); //sorts by rank
 			for (Player p : playersList) {
 				String s = "";
 				String s1 = "";
 				temp1 = p.getPlayed();
 				temp2 = p.getWins();
 				double temp3 = p.getLosses();
+				// checks if Player p has played any games and modifies the String s and String s1 appropriately
 				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
 				s1 += (p.getPlayed() == 0) ? s1 = "No Games played" : temp3 / temp1;
 				System.out.printf("%-15s%-30s%-50s %n","Name: " + p.getName(), "Win Ratio: " + s, " Loss Ratio: " + s1);
 			}
 		}
 	}
-	
-	public void sortArray() {
-		Collections.sort(playersList);
-		Collections.sort(playersList, Players_Losses);
-	}
-	
+	/**
+	 * 
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * Prompts user to enter the winner and loser of the game then finds the players through @see findByPlayerName()
+	 * <p> 
+	 * Then changes the data appropriately through swapPlayerRanks()
+	 */
 	public void playGame() throws PlayerNotFoundException, IOException {
 		String winner, loser;
 		System.out.print("Enter the winner: ");
@@ -126,7 +164,15 @@ public class League {
 		
 		swapPlayerRanks(winnerPlayer, loserPlayer);
 	}
-	
+	/**
+	 * 
+	 * @param winner
+	 * @param loser
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * based on the Players objects in the parameters changes the data accordingly and then saves the changes to a .txt file
+	 * through saveFiles()
+	 */
 	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException, IOException {
 		
 		if (winner.getRank() > loser.getRank()) {
@@ -171,7 +217,14 @@ public class League {
 		
 	}
 	
-	// searches the arrayList for players whose name is equal to the name given as a parameter. If no match is found it will throw PlayerNotFoundException
+	/**
+	 * 
+	 * @param name
+	 * @return p
+	 * @throws PlayerNotFoundException
+	 * using the name parameter searches through the list of players looking for a player whose name matches and
+	 * returns that Player
+	 */
 	public Player findPlayerByName(String name) throws PlayerNotFoundException {
 		for (Player p : playersList) {
 			if (p.getName().equals(name)) {
@@ -180,7 +233,14 @@ public class League {
 		}
 		throw new PlayerNotFoundException();
 	}
-	
+	/**
+	 * 
+	 * @param rank
+	 * @return p
+	 * @throws PlayerNotFoundException
+	 * using the rank parameter searches through the list of players looking for a player whose rank match and
+	 * returns that player
+	 */
 	private Player findPlayerByRank(int rank) throws PlayerNotFoundException {
 		for (Player p : playersList) {
 			if (p.getRank() == rank) {
@@ -189,11 +249,19 @@ public class League {
 		}
 		throw new PlayerNotFoundException();
 	}
-	
+	/**
+	 * 
+	 * @throws IOException
+	 * reads the file
+	 */
 	public void initialiseForTesting() throws IOException {
 		readFile();
 	}
-	
+	/**
+	 * 
+	 * @throws IOException
+	 * saves the array data to a text file
+	 */
 	private void saveFiles() throws IOException {
 		FileWriter f1 = new FileWriter("PoolLeague");
 		String temp = "";
@@ -208,7 +276,11 @@ public class League {
 		f1.write(tempChars);
 		f1.close();
 	}
-	
+	/**
+	 * 
+	 * @throws IOException
+	 * reads the data from file "PoolLeague" and populates array with that data
+	 */
 	private void readFile() throws IOException {
 		
 		String[] parts = new String[4];
@@ -238,7 +310,9 @@ public class League {
 		}	
 		
 	}
-	
+	/**
+	 * Compares by rank
+	 */
 	final static Comparator<Player> Players_Rank = new Comparator<Player>() {
 		public int compare(Player a, Player b) {
 			if (a.getRank() > b.getRank()) {
@@ -252,7 +326,9 @@ public class League {
 			}
 		}
 	};
-	
+	/**
+	 * Compares by wins
+	 */
 	final static Comparator<Player> Players_Wins = new Comparator<Player>() {
 		public int compare(Player a, Player b) {
 			if (a.getWins() < b.getWins()) {
@@ -266,7 +342,9 @@ public class League {
 			}
 		}
 	};
-	
+	/**
+	 * Compares by losses
+	 */
 	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
 		public int compare(Player a, Player b) {
 			if (a.getLosses() < b.getLosses()) {
@@ -280,4 +358,10 @@ public class League {
 			}
 		}
 	};
+	/**
+	 * Sorts the array by losses
+	 */
+	public void sortArray() {
+		Collections.sort(playersList, Players_Losses);
+	}
 }
