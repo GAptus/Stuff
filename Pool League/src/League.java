@@ -5,14 +5,23 @@ import java.io.*;
 
 public class League {
 	
+	//TODO make private
 	ArrayList<Player> playersList = new ArrayList<Player>();
 	
 	Scanner sc = new Scanner(System.in);
 	
 	public void addPlayer(Player p) throws IOException {
+		// takes argument for player name, etc
+		// calculates rank etc and adds into the array
+		// must handle case of trying to add a new player who has the same name as a
+		// player already in the database and throw an exception if the new player cannot be added
+		
 		playersList.add(p);
 		
 		saveFiles();
+		
+		
+		
 	}
 	
 	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
@@ -23,6 +32,10 @@ public class League {
 	}
 	
 	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
+		// TODO takes name of player as a string
+		// if player name exists remove from league
+		// throws a PlayerNotFound exception if we can't locate the player to remove
+		
 		int tempRank = p.getRank();
 		playersList.remove(p);
 		
@@ -36,6 +49,12 @@ public class League {
 	}
 	
 	public void printArray() {
+		// separate each of these printing/sorting schemes into individual methods.
+		// each method should return a string of the results, which can then be handled (e.g. printed)
+		// via the calling code
+	
+		
+		
 		
 		int response = 0;
 		double temp1 = 0.0;

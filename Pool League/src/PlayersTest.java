@@ -6,11 +6,7 @@ public class PlayersTest {
 	public static void main(String[] args) throws PlayerNotFoundException {
 		League myLeague = new League();
 		Scanner sc = new Scanner(System.in);
-		
-		
-		
-		
-		
+
 		boolean running = true;
 		
 		try {
@@ -38,11 +34,18 @@ public class PlayersTest {
 				}
 			}
 			else if (temp == 2) {  // print
+				// present options for which type of printing to perform at this level
+				// of the menu code and call individual methods within the league class
+				// 
+				
 				myLeague.printArray();
+				
 			}
 			else if (temp == 3) {  // add
 				String tempName = null;
 				int tempRank = 0;
+				
+				// TODO simplify menu code after re-writing addPlayer method
 				
 				Player addPlayer;
 				
@@ -71,6 +74,11 @@ public class PlayersTest {
 				
 				System.out.print("Enter the name of the player ");
 				tempName = sc.next();
+				
+				
+				// TODO get name of player from user.
+				// pass into removePlayer method
+				
 				
 				Player removePlayer = new Player(myLeague.findPlayerByName(tempName));
 				
