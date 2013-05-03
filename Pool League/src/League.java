@@ -14,7 +14,13 @@ public class League extends Observable {
 	private ArrayList<Player> playersList = new ArrayList<Player>();
 	
 	Scanner sc = new Scanner(System.in);
-	
+	/**	Method informObserver
+	 * 
+	 * @param winner Stores a Player object
+	 * @param loser	Stores a Player object#
+	 * 
+	 * Calls hasChanged to check if top ranked player has changed rank if so, it will inform the observers of this change
+	 */
 	public void informObserver(Player winner, Player loser) {
 		Collections.sort(playersList, Players_Rank);
 		
@@ -25,7 +31,11 @@ public class League extends Observable {
 		
 		
 	}
-	
+	/**	Method hasChanged
+	 * 
+	 * @param p Stores a Player
+	 * @return boolean true or false, dependent on whether the top ranked player has changed rank after playing
+	 */
 	public boolean hasChanged(Player p) {
 		if (p.getRank() != 1) {
 			return true;
@@ -34,21 +44,27 @@ public class League extends Observable {
 			return false;
 		}
 	}
-	
+	/**	Method getSizeOfPlayersList
+	 * 
+	 * @return the size of the playersList ArrayList
+	 */
 	public int getSizeOfPlayersList() {
 		return playersList.size();
 	}
-	
+	/**Method getPlayerFromPlayersList
+	 * 
+	 * @param position
+	 * @return	returns a player from a specific position in the playersList
+	 */
 	public Player getPlayerFromPlayersList(int position) {
 		return playersList.get(position);
 	}
-	/**
+	/**	Method addPlayer
 	 * 
-	 * @param p accepts a Player object 
-	 * @throws IOException 
-	 * This method will add in the PLayer object supplied in the parameter to the List
-	 * It will then call on 
-	 * saveFiles() to save the file to the text document containing a list of the players
+	 * @param name String
+	 * @param email	String 
+	 * @return	String
+	 * @throws IOException
 	 */
 	public String addPlayer(String name, String email) throws IOException {
 
@@ -69,7 +85,7 @@ public class League extends Observable {
 		}
 	}
 	
-	/**
+	/**	Method addPlayer
 	 * 
 	 * @param wins
 	 * @param losses
@@ -85,9 +101,8 @@ public class League extends Observable {
 		saveFiles();
 	}
 	
-	/**
+	/**	Method removePlayer
 	 * 
-	 * @param p
 	 * @throws PlayerNotFoundException
 	 * @throws IOException
 	 * removes a player based upon the object entered
@@ -108,7 +123,7 @@ public class League extends Observable {
 		
 		saveFiles();
 	}
-	/**
+	/**	Method printArray
 	 * 
 	 * @return String array which can be called and printed in PlayersTest class
 	 */
@@ -129,7 +144,7 @@ public class League extends Observable {
 		return printPlayers;
 		
 	}
-	/**
+	/**	Method printArrayByWins
 	 * 
 	 * @return String array which can be called and printed in PlayersTest class
 	 */
@@ -154,7 +169,7 @@ public class League extends Observable {
 		return printPlayers;
 		
 	}
-	/**
+	/**	Method printArrayByLoses
 	 * 
 	 * @return String array which can be called and printed in PlayersTest Class
 	 */
@@ -179,7 +194,7 @@ public class League extends Observable {
 		return printPlayers;
 		
 	}
-	/**
+	/**	Method playGame
 	 * 
 	 * @throws PlayerNotFoundException
 	 * @throws IOException
@@ -202,7 +217,7 @@ public class League extends Observable {
 		saveGames(winner, loser);
 		
 	}
-	/**
+	/**	Method swapPlayerRank
 	 * 
 	 * @param winner
 	 * @param loser
@@ -263,7 +278,7 @@ public class League extends Observable {
 		
 	}
 	
-	/**
+	/**	Method findPlayerByName
 	 * 
 	 * @param name
 	 * @return p
@@ -279,7 +294,7 @@ public class League extends Observable {
 		}
 		throw new PlayerNotFoundException();
 	}
-	/**
+	/**	Method findPlayerByRank
 	 * 
 	 * @param rank
 	 * @return p
@@ -296,7 +311,7 @@ public class League extends Observable {
 		throw new PlayerNotFoundException();
 	}
 
-	/**
+	/**	Method initialiseForTesting
 	 * 
 	 * @throws IOException
 	 * reads the file
@@ -304,7 +319,14 @@ public class League extends Observable {
 	public void initialiseForTesting() throws IOException {
 		readFile();
 	}
-	
+	/**	Method saveGames
+	 * 
+	 * @param winner
+	 * @param loser
+	 * @throws IOException
+	 * 
+	 * saves a list of all games played
+	 */
 	private void saveGames(String winner, String loser) throws IOException {
 		
 		
@@ -329,7 +351,7 @@ public class League extends Observable {
 		br.close();
 		f1.close();
 	}
-	/**
+	/**	Method saveFiles
 	 * 
 	 * @throws IOException
 	 * saves the array data to a text file
@@ -348,7 +370,7 @@ public class League extends Observable {
 		f1.write(tempChars);
 		f1.close();
 	}
-	/**
+	/**	Method readFiles
 	 * 
 	 * @throws IOException
 	 * reads the data from file "PoolLeague" and populates array with that data
@@ -382,7 +404,7 @@ public class League extends Observable {
 		}	
 		
 	}
-	/**
+	/**	
 	 * Compares by rank
 	 */
 	final static Comparator<Player> Players_Rank = new Comparator<Player>() {

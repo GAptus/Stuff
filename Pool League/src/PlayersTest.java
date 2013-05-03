@@ -9,7 +9,7 @@ public class PlayersTest implements Observer  {
 	static League myLeague = new League();
 
 	private static String emailPassword;
-	
+
 	public static void main(String[] args) throws PlayerNotFoundException {
 		
 		
@@ -34,7 +34,7 @@ public class PlayersTest implements Observer  {
 			System.exit(0);
 		}
 		
-		while(!enteredPassword) {
+		while(!enteredPassword) { // password entry, 3 tries then program exits
 			
 			
 			if (count == 3) {
