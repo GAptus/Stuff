@@ -1,16 +1,27 @@
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-public class PlayersTest {
+public class PlayersTest implements Observer  {
+
+	static League myLeague = new League();
+	
 	public static void main(String[] args) throws PlayerNotFoundException {
-		League myLeague = new League();
+		
+		
+		
 		Scanner sc = new Scanner(System.in);
 
 		boolean running = true;
 		
 		try {
 			myLeague.initialiseForTesting();
+			
+			myLeague.addObserver(new PlayersTest());
+			
+			
+			
 		}
 		catch (IOException e) {
 			System.out.println("File Missing");
@@ -61,15 +72,16 @@ public class PlayersTest {
 				}
 				
 			}
-			else if (temp == 3) {  // add
-				String tempName = null;
-				
+			else if (temp == 3) {  // add				
 
 				System.out.print("Enter the name of the player ");
-				tempName = sc.next();
+				String tempName = sc.next();
+				
+				System.out.println("Enter the email you wish your notifications to be sent to");
+				String tempEmail = sc.next();
 				
 				try {
-					myLeague.addPlayer(tempName);
+					myLeague.addPlayer(tempName, tempEmail);
 				}
 				catch (IOException e) {
 					System.out.println("There is a problem with the files");
@@ -81,12 +93,8 @@ public class PlayersTest {
 				System.out.print("Enter the name of the player ");
 				tempName = sc.next();
 				
-				
-				
-				Player removePlayer = new Player(myLeague.findPlayerByName(tempName));
-				
 				try {
-					myLeague.removePlayer(removePlayer);
+					myLeague.removePlayer(tempName);
 				}
 				catch (IOException e) {
 					System.out.println("There is a problem with the files");
@@ -101,4 +109,87 @@ public class PlayersTest {
 		}
 		sc.close();
 	}
+	
+	@Override
+	public void update(Observable observable, Object arg) {
+		
+		System.out.println("You are here");
+		
+		String[] loserWinner = new String[2];
+		
+		if (arg instanceof String) {
+			String s = (String) arg;
+			loserWinner = s.split(",");
+			
+			for (int i = 0; i < 2; i++) {
+				System.out.println(loserWinner[i]);
+			}
+		
+			try {
+				Player winner = myLeague.findPlayerByName(loserWinner[1]);
+
+				Player loser = myLeague.findPlayerByName(loserWinner[0]);
+
+				String body;
+				
+				
+				body = " You beat " + loser.getName() + "\n You have moved up to first place";
+				ObservedEmail.sentEmail(body, winner.getEmail());
+				
+				body = " You lost to " + winner.getName() + "\n You have moved down to second place";
+				ObservedEmail.sentEmail(body, loser.getEmail());
+				
+			}
+			catch (PlayerNotFoundException e) {
+				System.out.println("Player doesn't exist");
+			}
+			catch (UnsupportedEncodingException e) {
+				
+			}
+		}
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

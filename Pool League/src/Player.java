@@ -11,6 +11,7 @@ public class Player implements Comparable<Player> {
 	private int rank;
 	private String name;
 	private int played;
+	private String email;
 	
 	/**
 	 * 
@@ -20,22 +21,13 @@ public class Player implements Comparable<Player> {
 	 * @param name Stores name
 	 *	
 	 */
-	Player(int wins, int losses, int rank, String name) {
+	Player(int wins, int losses, int rank, String name, String email) {
 		this.wins = wins;
 		this.losses = losses;
 		this.rank = rank;
 		this.name = name;
 		played = wins + losses;
-	}
-	/**
-	 * @param p stores a Player
-	 */
-	Player(Player p) {
-		this.wins = p.wins;
-		this.losses = p.losses;
-		this.rank = p.rank;
-		this.name = p.name;
-		played = wins + losses;
+		this.email = email;
 	}
 	/**
 	 * 
@@ -47,17 +39,22 @@ public class Player implements Comparable<Player> {
 		rank = Integer.parseInt(s[2]);
 		name = s[3];
 		played = wins + losses;
+		email = s[4];
+	}
+	
+	public String getEmail() {
+		return email;
 	}
 	/**
 	 * Increments wins by 1
 	 */
-	public void AddToWins() {
+	public void addToWins() {
 		wins++;
 	}
 	/**
 	 * Decrements losses by 1
 	 */
-	public void AddToLosses() {
+	public void addToLosses() {
 		losses++;
 	}
 	/**
@@ -119,6 +116,6 @@ public class Player implements Comparable<Player> {
 	 * @return a string, this string holds the raw format of the player data which gets stored in a .txt file
 	 */
 	public String toString() {
-		return wins + "," + losses + "," + rank + "," + name;
+		return wins + "," + losses + "," + rank + "," + name + "," + email;
 	}
 }

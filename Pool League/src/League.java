@@ -8,12 +8,32 @@ import java.io.*;
  *@version 1.4
  *Class League stores a list of Player objects and provides different methods for handling and sorting them
  */
-public class League {
+public class League extends Observable {
 	
-	//TODO make private
+
 	private ArrayList<Player> playersList = new ArrayList<Player>();
 	
 	Scanner sc = new Scanner(System.in);
+	
+	public void informObserver(Player winner, Player loser) {
+		Collections.sort(playersList, Players_Rank);
+		
+		if (hasChanged(loser)) {
+			this.setChanged();
+			this.notifyObservers(loser.getName() + "," + winner.getName());
+		}
+		
+		
+	}
+	
+	public boolean hasChanged(Player p) {
+		if (p.getRank() != 1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	public int getSizeOfPlayersList() {
 		return playersList.size();
@@ -30,7 +50,7 @@ public class League {
 	 * It will then call on 
 	 * saveFiles() to save the file to the text document containing a list of the players
 	 */
-	public String addPlayer(String name) throws IOException {
+	public String addPlayer(String name, String email) throws IOException {
 
 		boolean exists = false;
 		
@@ -44,7 +64,7 @@ public class League {
 			return "Players exists, please change name to a unique one"; 
 		}
 		else {
-			playersList.add(new Player(0, 0, playersList.size() + 1, name));
+			playersList.add(new Player(0, 0, playersList.size() + 1, name, email));
 			return "Player successfully added!";
 		}
 	}
@@ -58,8 +78,8 @@ public class League {
 	 * @throws IOException
 	 * Overridden method of addPlayer, accepts a range of primitives used to construct a Player object
 	 */
-	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
-		Player p = new Player(wins, losses, rank, name);
+	public void addPlayer(int wins, int losses, int rank, String name, String email) throws IOException{
+		Player p = new Player(wins, losses, rank, name, email);
 		playersList.add(p);
 		
 		saveFiles();
@@ -72,10 +92,12 @@ public class League {
 	 * @throws IOException
 	 * removes a player based upon the object entered
 	 */
-	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
+	public void removePlayer(String name) throws PlayerNotFoundException, IOException {
 		
-		int tempRank = p.getRank();
-		playersList.remove(p);
+		Player removePlayer = findPlayerByName(name);
+		
+		int tempRank = removePlayer.getRank();
+		playersList.remove(removePlayer);
 		
 		// This loop checks where in the list the Player was located and remedies the ranks of player above it
 		for (Player r : playersList) {
@@ -98,7 +120,7 @@ public class League {
 		Collections.sort(playersList, Players_Rank);
 		
 		for (Player p : playersList) {
-			printPlayers[count] = "Name: " + p.getName() + "\t Loses: " + p.getLosses() + "\t Played: " + p.getPlayed()
+			printPlayers[count] = "Name: " + p.getName() + "\t Loses: " + p.getLosses() + "\t Wins: " + p.getWins() + "\t Played: " + p.getPlayed()
 									+ "\t Rank: " + p.getRank();
 			
 			count++;
@@ -191,24 +213,28 @@ public class League {
 	 */
 	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException, IOException {
 		
+		Collections.sort(playersList, Players_Rank);
+		
+		Player leader = playersList.get(0);
+		
 		if (winner.getRank() > loser.getRank()) {
 			if (winner.getRank() - 1 == loser.getRank()) {
 				
 				winner.moveUpRank();
-				winner.AddToWins();
+				winner.addToWins();
 				
 				loser.moveDownRank();
-				loser.AddToLosses();
+				loser.addToLosses();
 			}
 			else if (winner.getRank() - 2 == loser.getRank()) {
 				Player tempSwitch = findPlayerByRank(winner.getRank() - 1);
 				
 				loser.moveDownRank();
-				loser.AddToLosses();
+				loser.addToLosses();
 				tempSwitch.moveUpRank();
 				
 				winner.moveUpRank();
-				winner.AddToWins();
+				winner.addToWins();
 				loser.moveDownRank();
 			}
 			else {
@@ -216,20 +242,24 @@ public class League {
 				Player tempSwitchLoser = findPlayerByRank(loser.getRank() + 1);
 				
 				winner.moveUpRank();
-				winner.AddToWins();
+				winner.addToWins();
 				tempSwitchWinner.moveDownRank();
 				
 				loser.moveDownRank();
-				loser.AddToLosses();
+				loser.addToLosses();
 				tempSwitchLoser.moveUpRank();
 			}
 		}
 		else {
-			winner.AddToWins();
-			loser.AddToLosses();
+			winner.addToWins();
+			loser.addToLosses();
 		}
 		
 		saveFiles();
+		
+		if (loser.equals(leader)) {
+			informObserver(winner, leader);
+		}
 		
 	}
 	
