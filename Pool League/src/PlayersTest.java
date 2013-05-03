@@ -2,10 +2,13 @@
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import javax.swing.*;
 
 public class PlayersTest implements Observer  {
 
 	static League myLeague = new League();
+
+	private static String emailPassword;
 	
 	public static void main(String[] args) throws PlayerNotFoundException {
 		
@@ -15,11 +18,14 @@ public class PlayersTest implements Observer  {
 
 		boolean running = true;
 		
+		boolean enteredPassword = false;
+		
+		int count = 0;
+		
 		try {
 			myLeague.initialiseForTesting();
 			
 			myLeague.addObserver(new PlayersTest());
-			
 			
 			
 		}
@@ -29,6 +35,31 @@ public class PlayersTest implements Observer  {
 		}
 		
 		while(running) {
+			
+			
+			if (count == 3) {
+				System.exit(0);
+			}
+			else if (!enteredPassword) {
+				System.out.println("Enter the master password: ");
+				String s = passwordGUI();
+				try {
+					if (ObservedEmail.checkMasterPassword(s) == null) {
+						count++;
+					}
+					else {
+						emailPassword = ObservedEmail.checkMasterPassword(s);
+						enteredPassword = true;
+					}
+				}
+				catch (IOException e) {
+					System.out.println("Error!");
+				}
+			}
+		}
+		
+		while (running) {
+			
 			int temp = 0;
 			System.out.print("Enter 1 to play a game, 2 to print the league table, 3 to add a player, 4 to remove a player or 5 to exit");
 			temp = sc.nextInt();
@@ -134,10 +165,10 @@ public class PlayersTest implements Observer  {
 				
 				
 				body = " You beat " + loser.getName() + "\n You have moved up to first place";
-				ObservedEmail.sentEmail(body, winner.getEmail());
+				ObservedEmail.sentEmail(body, winner.getEmail(), emailPassword);
 				
 				body = " You lost to " + winner.getName() + "\n You have moved down to second place";
-				ObservedEmail.sentEmail(body, loser.getEmail());
+				ObservedEmail.sentEmail(body, loser.getEmail(), emailPassword);
 				
 			}
 			catch (PlayerNotFoundException e) {
@@ -148,6 +179,26 @@ public class PlayersTest implements Observer  {
 			}
 		}
 		
+	}
+	
+	private static String passwordGUI() {
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("Enter a password: ");
+		JPasswordField pass = new JPasswordField(15);
+		
+		panel.add(label);
+		panel.add(pass);
+		
+		String[] options = {"OK", "Cancel"};
+		int option = JOptionPane.showOptionDialog(null, panel, "Master Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		
+		if (option == 0) {
+			char[] password = pass.getPassword();
+			return password.toString();
+		}
+		else {
+			return null;
+		}
 	}
 }
 
