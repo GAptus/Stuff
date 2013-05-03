@@ -1,0 +1,25 @@
+
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
+import java.util.*;
+
+public class Encryption {
+	
+	static Scanner sc = new Scanner(System.in);
+	
+	static StrongPasswordEncryptor textEncryptor = new StrongPasswordEncryptor();
+	
+	private String encryptedPassword;
+	
+	private static String password;
+	
+	public static void main(String[] args) {
+		
+		password = sc.next();
+		
+		System.out.println(textEncryptor.encryptPassword(password));
+		
+		
+	}
+
+}

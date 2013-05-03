@@ -1,0 +1,129 @@
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+import java.util.Date;
+import javax.swing.*;
+
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
+
+public class ObservedEmail {
+	
+	public static void sentEmail(String body, String email) throws PlayerNotFoundException, UnsupportedEncodingException {
+		
+		Date myDate = new Date();
+		
+		Properties propsTLS = new Properties();
+		
+		propsTLS.put("mail.transport.protocol", "smtp");
+		propsTLS.put("mail.smtp.host", "smtp.gmail.com");
+		propsTLS.put("mail.smtp.auth", "true");
+		propsTLS.put("mail.smtp.starttls.enable", "true");
+		
+		
+		Session sessionTLS = Session.getInstance(propsTLS);
+		
+		sessionTLS.setDebug(true);
+		
+	
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("Enter a password");
+		JPasswordField pass = new JPasswordField(15);
+		panel.add(label);
+		panel.add(pass);
+		
+		String[] options = {"OK", "Cancel"};
+		
+		String password = null;
+		int option = JOptionPane.showOptionDialog(null, panel, "The title", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+		
+		if (option == 0) {
+			char[] passwordStorage = pass.getPassword();
+			password = new String(passwordStorage);
+		}
+		
+
+		
+		try {
+			Message messageTLS = new MimeMessage(sessionTLS);
+			
+			messageTLS.setFrom(new InternetAddress("aptuspool@gmail.com"));
+			
+			
+			messageTLS.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+			
+			messageTLS.setSubject("Pool League!!!!!");
+			
+			messageTLS.setText(myDate.toString() + " : " + body);
+			
+			Transport transportTLS = sessionTLS.getTransport();
+			
+			transportTLS.connect("smtp.gmail.com", 587, "aptuspool@gmail.com", password);
+			
+			transportTLS.sendMessage(messageTLS, messageTLS.getAllRecipients());
+			
+			transportTLS.close();
+		}
+		catch(MessagingException e) {
+			System.out.println("Put a real email");
+		}
+		
+	}
+	
+	public static String checkMasterPassword(String password) throws IOException {
+		
+		StrongPasswordEncryptor strongEncrypt = new StrongPasswordEncryptor();
+		BasicTextEncryptor basicEncrypt = new BasicTextEncryptor();
+		
+		FileReader masterReader = new FileReader("MasterPassword");
+		BufferedReader masterBR = new BufferedReader(masterReader);
+		
+		FileReader basicFR = new FileReader("EmailPassword");
+		BufferedReader basicBR = new BufferedReader(basicFR);
+		
+		String masterPass = masterBR.readLine();
+		String emailPass = basicBR.readLine();
+		
+		if (strongEncrypt.checkPassword(password, masterPass)) {
+			basicEncrypt.setPassword("12345");
+			return basicEncrypt.decrypt(emailPass);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

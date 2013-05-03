@@ -1,0 +1,15 @@
+
+import java.util.*;
+
+public class PlayersTest {
+	public static void main(String[] args) {
+		SortingThePlayers myLeague = new SortingThePlayers();
+		Scanner sc = new Scanner(System.in);
+		
+		boolean running = true;
+		
+		while(running) {
+			System.out.print("Enter 1 to play a game, 2 to print the league table, 3 to add a player or 4 to remove a player");
+		}
+	}
+}

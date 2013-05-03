@@ -1,0 +1,102 @@
+
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+
+
+class SendMail {
+
+	public static void main(String[] args) {
+		
+		try {
+			sentEmail("Robin", "hello", "robin@aptusinteractive.com");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+	
+	
+	
+	public static void sentEmail(String recipient, String body, String email) throws UnsupportedEncodingException {
+		
+		Properties propsTLS = new Properties();
+		propsTLS.put("mail.transport.protocol", "smtp");
+		propsTLS.put("mail.smtp.host", "smtp.gmail.com");
+		propsTLS.put("mail.smtp.auth", "true");
+		propsTLS.put("mail.smtp.starttls.enable", "true"); // GMail requires
+		
+		
+		Session sessionTLS = Session.getInstance(propsTLS);
+		sessionTLS.setDebug(true);
+
+				try {
+					Message messageTLS = new MimeMessage(sessionTLS);
+					messageTLS.setFrom(new InternetAddress("aptuspool@gmail.com"));
+					messageTLS.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+					messageTLS.setSubject("Your bad at pool");
+					messageTLS.setText(body);
+					
+					Transport transportTLS = sessionTLS.getTransport();
+					transportTLS.connect("smtp.gmail.com", 587, "aptuspool@gmail.com", "aptus123");
+					transportTLS.sendMessage(messageTLS,  messageTLS.getAllRecipients());
+					transportTLS.close();
+				}
+				catch (MessagingException e) {
+					throw new RuntimeException(e);
+				}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private static void send(){	
+		
+		Properties propsTLS = new Properties();
+		propsTLS.put("mail.transport.protocol", "smtp");
+		propsTLS.put("mail.smtp.host", "smtp.gmail.com");
+		propsTLS.put("mail.smtp.auth", "true");
+		propsTLS.put("mail.smtp.starttls.enable", "true"); // GMail requires
+		
+		
+		Session sessionTLS = Session.getInstance(propsTLS);
+		sessionTLS.setDebug(true);
+
+				try {
+					Message messageTLS = new MimeMessage(sessionTLS);
+					messageTLS.setFrom(new InternetAddress("aptuspool@gmail.com"));
+					messageTLS.setRecipient(Message.RecipientType.TO, new InternetAddress("omar@aptusinteractive.com"));
+					messageTLS.setSubject("Your bad at pool");
+					messageTLS.setText("Your bad at pool");
+					
+					Transport transportTLS = sessionTLS.getTransport();
+					transportTLS.connect("smtp.gmail.com", 587, "aptuspool@gmail.com", "aptus123");
+					transportTLS.sendMessage(messageTLS,  messageTLS.getAllRecipients());
+					transportTLS.close();
+				}
+				catch (MessagingException e) {
+					throw new RuntimeException(e);
+				}
+	}
+}

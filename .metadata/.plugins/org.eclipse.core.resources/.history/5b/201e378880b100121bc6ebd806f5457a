@@ -1,0 +1,56 @@
+
+import java.util.*;
+
+public class PlayersTest {
+	public static void main(String[] args) throws PlayerNotFoundException {
+		SortingThePlayers myLeague = new SortingThePlayers();
+		Scanner sc = new Scanner(System.in);
+		
+		boolean running = true;
+		
+		while(running) {
+			int temp = 0;
+			System.out.print("Enter 1 to play a game, 2 to print the league table, 3 to add a player or 4 to remove a player");
+			temp = sc.nextInt();
+			
+			if (temp == 1) {
+				try {
+					myLeague.playGame();
+				}
+				catch (PlayerNotFoundException e) {
+					System.out.println("One or more of your players cannot be found");
+				}
+			}
+			else if (temp == 2) {
+				myLeague.printArray();
+			}
+			else if (temp == 3) {
+				String tempName = null;
+				int tempRank = 0;
+				System.out.print("Enter the name of the player ");
+				tempName = sc.next();
+				
+				Collections.sort(myLeague.playersList);
+				tempRank = myLeague.playersList.get(myLeague.playersList.size() - 1).getRank() + 1;
+				
+				Player addPlayer = new Player(0, 0, tempRank, tempName);
+				
+				myLeague.addPlayer(addPlayer);
+			}
+			else if (temp == 4) {
+				String tempName = null;
+				
+				System.out.print("Enter the name of the player ");
+				tempName = sc.next();
+				
+				Player removePlayer = new Player(myLeague.findPlayerByName(tempName));
+				
+				myLeague.removePlayer(removePlayer);
+			}
+			else {
+				
+			}
+		}
+		sc.close();
+	}
+}

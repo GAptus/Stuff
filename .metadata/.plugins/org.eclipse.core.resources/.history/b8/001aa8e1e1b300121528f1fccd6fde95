@@ -1,0 +1,27 @@
+
+import org.jasypt.hibernate.connectionprovider.EncryptedPasswordC3P0ConnectionProvider;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
+import java.util.*;
+
+public class Encryption {
+	
+	static Scanner sc = new Scanner(System.in);
+	
+	static StrongPasswordEncryptor textEncryptor = new StrongPasswordEncryptor();
+	
+	private static String encryptedPassword;
+	
+	private static String password;
+	
+	public static void main(String[] args) {
+		
+		password = sc.next();
+		
+		encryptedPassword = textEncryptor.encryptPassword(password);
+		
+		System.out.println(encryptedPassword);
+		
+	}
+
+}

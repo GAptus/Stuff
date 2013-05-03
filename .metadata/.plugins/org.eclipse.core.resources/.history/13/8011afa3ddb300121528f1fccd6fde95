@@ -1,0 +1,15 @@
+
+import org.jasypt.util.text.BasicTextEncryptor;
+
+public class Encryption {
+	
+	static BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+	
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		textEncryptor.setPassword("123");
+		System.out.println(textEncryptor.encrypt("Hello World"));
+		System.out.println(textEncryptor.decrypt("Hello World"));
+	}
+
+}

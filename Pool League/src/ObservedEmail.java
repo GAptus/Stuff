@@ -19,6 +19,11 @@ import org.jasypt.util.text.BasicTextEncryptor;
 
 public class ObservedEmail {
 	
+	/*	Method sentEmail
+	 * 	
+	 */
+	
+	
 	public static void sentEmail(String body, String email, String password) throws PlayerNotFoundException, UnsupportedEncodingException {
 		
 		Date myDate = new Date();

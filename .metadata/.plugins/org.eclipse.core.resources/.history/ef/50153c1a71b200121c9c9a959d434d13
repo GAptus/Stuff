@@ -1,0 +1,381 @@
+
+import java.util.*;
+import java.io.*;
+
+/**
+ * 
+ * @author giacomo
+ *@version 1.4
+ *Class League stores a list of Player objects and provides different methods for handling and sorting them
+ */
+public class League {
+	
+	//TODO make private
+	private ArrayList<Player> playersList = new ArrayList<Player>();
+	
+	Scanner sc = new Scanner(System.in);
+	
+	public int getSizeOfPlayersList() {
+		return playersList.size();
+	}
+	
+	public Player getPlayersFromPlayersList(int position) {
+		return playersList.get(position);
+	}
+	/**
+	 * 
+	 * @param p accepts a Player object 
+	 * @throws IOException 
+	 * This method will add in the PLayer object supplied in the parameter to the List
+	 * It will then call on 
+	 * saveFiles() to save the file to the text document containing a list of the players
+	 */
+	public void addPlayer(Player p) throws IOException {
+		// takes argument for player name, etc
+		// calculates rank etc and adds into the array
+		// must handle case of trying to add a new player who has the same name as a
+		// player already in the database and throw an exception if the new player cannot be added
+		
+		playersList.add(p);
+		
+		saveFiles();
+		
+		
+		
+	}
+	
+	/**
+	 * 
+	 * @param wins
+	 * @param losses
+	 * @param rank
+	 * @param name
+	 * @throws IOException
+	 * Overridden method of addPlayer, accepts a range of primitives used to construct a Player object
+	 */
+	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
+		Player p = new Player(wins, losses, rank, name);
+		playersList.add(p);
+		
+		saveFiles();
+	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * removes a player based upon the object entered
+	 */
+	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
+		// TODO takes name of player as a string
+		// if player name exists remove from league
+		// throws a PlayerNotFound exception if we can't locate the player to remove
+		
+		int tempRank = p.getRank();
+		playersList.remove(p);
+		
+		// This loop checks where in the list the Player was located and remedies the ranks of player above it
+		for (Player r : playersList) {
+			if (r.getRank() > tempRank) {
+				r.moveUpRank();
+			}				
+		}
+		
+		saveFiles();
+	}
+	/**
+	 * 
+	 * @return String array which can be called and printed in PlayersTest class
+	 */
+	public String[] printArrayLeague() {
+		// separate each of these printing/sorting schemes into individual methods.
+		// each method should return a string of the results, which can then be handled (e.g. printed)
+		// via the calling code
+		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
+		
+		Collections.sort(playersList, Players_Rank);
+		
+		for (Player p : playersList) {
+			printPlayers[count] = "Name: " + p.getName() + "\t Loses: " + p.getLosses() + "\t Played: " + p.getPlayed()
+									+ "\t Rank: " + p.getRank();
+			
+			count++;
+		}
+		
+		return printPlayers;
+		
+	}
+	/**
+	 * 
+	 * @return String array which can be called and printed in PlayersTest class
+	 */
+	public String[] printArrayByWins() {
+		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
+		
+		Collections.sort(playersList, Players_Wins);
+		
+		for (Player p : playersList) {
+			String s = "";
+			
+			s += (p.getPlayed() == 0) ? "No Games Played" : (p.getWins() / p.getPlayed());
+			
+			printPlayers[count] = "Name: " + p.getName()  + "\t Loses: " + p.getLosses() + "\t Wins: " + p.getWins()
+									+ "\t Win Ratio: " + s;
+			
+			count++;
+		}
+		
+		return printPlayers;
+		
+	}
+	/**
+	 * 
+	 * @return String array which can be called and printed in PlayersTest Class
+	 */
+	public String[] printArrayByLoses() {
+		
+		String[] printPlayers = new String[playersList.size()];
+		int count = 0;
+		
+		Collections.sort(playersList, Players_Losses);
+		
+		for (Player p : playersList) {
+			String s = "";
+			
+			s += (p.getPlayed() == 0) ? "No Games Played" : (p.getLosses() / p.getPlayed());
+			
+			printPlayers[count] = "Name: " + p.getName() + "\t Wins: " + p.getWins() + "\t Loses: " + p.getLosses() 
+									+ "\t Lose Ratio: " + s;
+			
+			count++;
+		}
+		
+		return printPlayers;
+		
+	}
+	/**
+	 * 
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * Prompts user to enter the winner and loser of the game then finds the players through @see findByPlayerName()
+	 * <p> 
+	 * Then changes the data appropriately through swapPlayerRanks()
+	 */
+	public void playGame() throws PlayerNotFoundException, IOException {
+		String winner, loser;
+		System.out.print("Enter the winner: ");
+		winner = sc.next();
+		Player winnerPlayer = findPlayerByName(winner);
+		
+		System.out.print("\n" + "Enter the loser: ");
+		loser = sc.next();
+		Player loserPlayer = findPlayerByName(loser);
+		
+		swapPlayerRanks(winnerPlayer, loserPlayer);
+	}
+	/**
+	 * 
+	 * @param winner
+	 * @param loser
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * based on the Players objects in the parameters changes the data accordingly and then saves the changes to a .txt file
+	 * through saveFiles()
+	 */
+	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException, IOException {
+		
+		if (winner.getRank() > loser.getRank()) {
+			if (winner.getRank() - 1 == loser.getRank()) {
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+			}
+			else if (winner.getRank() - 2 == loser.getRank()) {
+				Player tempSwitch = findPlayerByRank(winner.getRank() - 1);
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+				tempSwitch.moveUpRank();
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				loser.moveDownRank();
+			}
+			else {
+				Player tempSwitchWinner = findPlayerByRank(winner.getRank() - 1);
+				Player tempSwitchLoser = findPlayerByRank(loser.getRank() + 1);
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				tempSwitchWinner.moveDownRank();
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+				tempSwitchLoser.moveUpRank();
+			}
+		}
+		else {
+			winner.AddToWins();
+			loser.AddToLosses();
+		}
+		
+		saveFiles();
+		
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @return p
+	 * @throws PlayerNotFoundException
+	 * using the name parameter searches through the list of players looking for a player whose name matches and
+	 * returns that Player
+	 */
+	public Player findPlayerByName(String name) throws PlayerNotFoundException {
+		for (Player p : playersList) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		throw new PlayerNotFoundException();
+	}
+	/**
+	 * 
+	 * @param rank
+	 * @return p
+	 * @throws PlayerNotFoundException
+	 * using the rank parameter searches through the list of players looking for a player whose rank match and
+	 * returns that player
+	 */
+	private Player findPlayerByRank(int rank) throws PlayerNotFoundException {
+		for (Player p : playersList) {
+			if (p.getRank() == rank) {
+				return p;
+			}
+		}
+		throw new PlayerNotFoundException();
+	}
+	/**
+	 * 
+	 * @throws IOException
+	 * reads the file
+	 */
+	public void initialiseForTesting() throws IOException {
+		readFile();
+	}
+	/**
+	 * 
+	 * @throws IOException
+	 * saves the array data to a text file
+	 */
+	private void saveFiles() throws IOException {
+		FileWriter f1 = new FileWriter("PoolLeague");
+		String temp = "";
+		char[] tempChars;
+		
+		for (Player p : playersList) {
+			temp += p + "\n";
+		}
+		
+		tempChars = new char[temp.length()];
+		tempChars = temp.toCharArray();
+		f1.write(tempChars);
+		f1.close();
+	}
+	/**
+	 * 
+	 * @throws IOException
+	 * reads the data from file "PoolLeague" and populates array with that data
+	 */
+	private void readFile() throws IOException {
+		
+		String[] parts = new String[4];
+		int count = 1;
+		String s;
+		
+		try {
+			FileReader f1 = new FileReader("PoolLeague");
+			BufferedReader br = new BufferedReader(f1);
+			
+			while ((s = br.readLine()) != null) {
+				parts = s.split(",");
+				
+				if (parts.length < 4) {
+					System.out.println("Your are missing " + (4 - parts.length) + " values from line" + count);
+					System.exit(0);
+				}
+				else {
+					playersList.add(new Player(parts));
+				}
+			}
+			br.close();
+			f1.close();
+		}
+		catch (IOException e) {
+			System.out.println("Your file is missing!");
+		}	
+		
+	}
+	/**
+	 * Compares by rank
+	 */
+	final static Comparator<Player> Players_Rank = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getRank() > b.getRank()) {
+				return 1;
+			}
+			else if (a.getRank() == b.getRank()) {
+				return 0;
+			}
+			else  {
+				return -1;
+			}
+		}
+	};
+	/**
+	 * Compares by wins
+	 */
+	final static Comparator<Player> Players_Wins = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getWins() < b.getWins()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+	};
+	/**
+	 * Compares by losses
+	 */
+	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getLosses() < b.getLosses()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+	};
+	/**
+	 * Sorts the array by losses
+	 */
+	public void sortArray() {
+		Collections.sort(playersList, Players_Losses);
+	}
+}

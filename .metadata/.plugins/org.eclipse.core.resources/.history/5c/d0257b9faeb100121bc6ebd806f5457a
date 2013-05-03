@@ -1,0 +1,264 @@
+
+import java.util.*;
+import java.io.*;
+
+
+public class League {
+	
+	ArrayList<Player> playersList = new ArrayList<Player>();
+	
+	Scanner sc = new Scanner(System.in);
+	
+	public void addPlayer(Player p) throws IOException {
+		playersList.add(p);
+		
+		saveFiles();
+	}
+	
+	public void addPlayer(int wins, int losses, int rank, String name) throws IOException{
+		Player p = new Player(wins, losses, rank, name);
+		playersList.add(p);
+		
+		saveFiles();
+	}
+	
+	public void removePlayer(Player p) throws PlayerNotFoundException, IOException {
+		int tempRank = p.getRank();
+		playersList.remove(p);
+		
+		for (Player r : playersList) {
+			if (r.getRank() > tempRank) {
+				r.moveUpRank();
+			}				
+		}
+		
+		saveFiles();
+	}
+	
+	public void printArray() {
+		
+		int response = 0;
+		double temp1 = 0.0;
+		double temp2 = 0.0;
+		
+		
+		System.out.print("Enter 1 to see the league table, 2 to see who has most wins, 3 to see who has most losses and 4 to compare ratio's");
+		response = sc.nextInt();
+		
+		if (response == 1) {
+			Collections.sort(playersList, Players_Rank);
+			for (Player p : playersList) {
+				System.out.println("Name: " + p.getName() + "\t Wins: " 
+									+ p.getWins() + "\t Loses: " + p.getLosses() + "\t Played: " 
+										+ p.getPlayed() + "\t Rank: " + p.getRank());
+			}
+		}
+		else if (response == 2) {
+			Collections.sort(playersList, Players_Wins);
+			for (Player p : playersList) {
+				String s = "";
+				temp1 = p.getPlayed();
+				temp2 = p.getWins();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
+				System.out.println("Name: " + p.getName() + "\t Wins: " + p.getWins() 
+						            + "\t Loses: " + p.getLosses() + "\t Win Ratio: " + s); 
+			}
+		}
+		else if (response == 3) {
+			Collections.sort(playersList, Players_Losses);
+			for (Player p : playersList) {
+				String s = "";
+				temp1 = p.getPlayed();
+				temp2 = p.getLosses();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
+				System.out.println("Name: " + p.getName() + "\t Loses: " + p.getLosses() 
+									+ "\t Wins: " + p.getWins() + "\t Loss Ratio: " + s);
+			}
+		}
+		else if (response == 4) {
+			Collections.sort(playersList,  Players_Rank);
+			for (Player p : playersList) {
+				String s = "";
+				String s1 = "";
+				temp1 = p.getPlayed();
+				temp2 = p.getWins();
+				double temp3 = p.getLosses();
+				s += (p.getPlayed() == 0) ? "No Games Played" : temp2 / temp1;
+				s1 += (p.getPlayed() == 0) ? s1 = "No Games played" : temp3 / temp1;
+				System.out.printf("%-45s%-30s %n", s, s1);
+			}
+		}
+	}
+	
+	public void sortArray() {
+		Collections.sort(playersList);
+		Collections.sort(playersList, Players_Losses);
+	}
+	
+	public void playGame() throws PlayerNotFoundException, IOException {
+		String winner, loser;
+		System.out.print("Enter the winner: ");
+		winner = sc.next();
+		Player winnerPlayer = findPlayerByName(winner);
+		
+		System.out.print("\n" + "Enter the loser: ");
+		loser = sc.next();
+		Player loserPlayer = findPlayerByName(loser);
+		
+		swapPlayerRanks(winnerPlayer, loserPlayer);
+	}
+	
+	private void swapPlayerRanks(Player winner, Player loser) throws PlayerNotFoundException, IOException {
+		
+		if (winner.getRank() > loser.getRank()) {
+			if (winner.getRank() - 1 == loser.getRank()) {
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+			}
+			else if (winner.getRank() - 2 == loser.getRank()) {
+				Player tempSwitch = findPlayerByRank(winner.getRank() - 1);
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+				tempSwitch.moveUpRank();
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				loser.moveDownRank();
+			}
+			else {
+				Player tempSwitchWinner = findPlayerByRank(winner.getRank() - 1);
+				Player tempSwitchLoser = findPlayerByRank(loser.getRank() + 1);
+				
+				winner.moveUpRank();
+				winner.AddToWins();
+				tempSwitchWinner.moveDownRank();
+				
+				loser.moveDownRank();
+				loser.AddToLosses();
+				tempSwitchLoser.moveUpRank();
+			}
+		}
+		else {
+			winner.AddToWins();
+			loser.AddToLosses();
+		}
+		
+		saveFiles();
+		
+	}
+	
+	// searches the arrayList for players whose name is equal to the name given as a parameter. If no match is found it will throw PlayerNotFoundException
+	public Player findPlayerByName(String name) throws PlayerNotFoundException {
+		for (Player p : playersList) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		throw new PlayerNotFoundException();
+	}
+	
+	private Player findPlayerByRank(int rank) throws PlayerNotFoundException {
+		for (Player p : playersList) {
+			if (p.getRank() == rank) {
+				return p;
+			}
+		}
+		throw new PlayerNotFoundException();
+	}
+	
+	public void initialiseForTesting() throws IOException {
+		readFile();
+	}
+	
+	private void saveFiles() throws IOException {
+		FileWriter f1 = new FileWriter("PoolLeague");
+		String temp = "";
+		char[] tempChars;
+		
+		for (Player p : playersList) {
+			temp += p + "\n";
+		}
+		
+		tempChars = new char[temp.length()];
+		tempChars = temp.toCharArray();
+		f1.write(tempChars);
+		f1.close();
+	}
+	
+	private void readFile() throws IOException {
+		
+		String[] parts = new String[4];
+		int count = 1;
+		String s;
+		
+		try {
+			FileReader f1 = new FileReader("PoolLeague");
+			BufferedReader br = new BufferedReader(f1);
+			
+			while ((s = br.readLine()) != null) {
+				parts = s.split(",");
+				
+				if (parts.length < 4) {
+					System.out.println("Your are missing " + (4 - parts.length) + " values from line" + count);
+					System.exit(0);
+				}
+				else {
+					playersList.add(new Player(parts));
+				}
+			}
+			br.close();
+			f1.close();
+		}
+		catch (IOException e) {
+			System.out.println("Your file is missing!");
+		}	
+		
+	}
+	
+	final static Comparator<Player> Players_Rank = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getRank() > b.getRank()) {
+				return 1;
+			}
+			else if (a.getRank() == b.getRank()) {
+				return 0;
+			}
+			else  {
+				return -1;
+			}
+		}
+	};
+	
+	final static Comparator<Player> Players_Wins = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getWins() < b.getWins()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+	};
+	
+	final static Comparator<Player> Players_Losses = new Comparator<Player>() {
+		public int compare(Player a, Player b) {
+			if (a.getLosses() < b.getLosses()) {
+				return 1;
+			}
+			else if (a.getWins() == b.getWins()) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+	};
+}

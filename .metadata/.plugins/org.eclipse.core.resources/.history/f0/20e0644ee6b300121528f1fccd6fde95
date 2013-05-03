@@ -1,0 +1,93 @@
+
+import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.StrongTextEncryptor;
+
+import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class Encryption {
+	
+	static Scanner sc = new Scanner(System.in);
+	
+	private static String encryptedPassword; 
+	private static boolean created = false;
+	
+	
+	public static void main(String[] args) throws IOException {
+		
+		
+		
+		String password;
+		
+		while (!created) {
+			System.out.println("Enter your new password: ");
+			password = sc.next();
+			
+			encryptPassword(changePassword(password));
+			
+			savePassword(encryptedPassword);
+			
+		}
+		
+		sc.close();
+		
+	}
+	
+	private static void savePassword(String password, int choice) throws IOException {
+		
+		String file = null;
+
+		switch (choice) {
+		case 1:
+			file = "MasterPassword";
+			break;
+		case 2: 
+			file = "MasterPassword";
+			break;
+		}
+		
+		try {
+			FileWriter fw = new FileWriter(file);
+			
+			fw.write(encryptedPassword);
+			
+			System.out.println("Password successully saved to file");
+			
+			fw.close();
+		}
+		catch (IOException e) {
+			System.out.println("Enter a valid number, either 1 or 2");
+		}
+	
+	}
+	
+	private static void encryptPassword(String password) {
+		StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+		
+		encryptedPassword = passwordEncryptor.encryptPassword(password);
+		
+		System.out.println("New password sucessfully encrypted");
+		
+		created = true;
+	}
+	
+	private static String changePassword() {
+		System.out.println("Enter the new password");
+		
+		String s = sc.next();
+		
+		System.out.println("New Password sucessfully created");
+		
+		return s;
+	}
+	
+	private static void encryptEmailPassword(String password) {
+		StrongTextEncryptor strongEncrypt = new StrongTextEncryptor();
+		
+		strongEncrypt.encrypt(password);
+	}
+
+}

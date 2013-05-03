@@ -1,0 +1,61 @@
+
+import org.jasypt.hibernate.connectionprovider.EncryptedPasswordC3P0ConnectionProvider;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
+import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.imageio.IIOException;
+
+
+public class Encryption {
+	
+	private static String encryptedPassword; 
+	private static boolean created = false;
+	
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String password;
+		
+		while (!created) {
+			System.out.println("Enter your new password: ");
+			password = sc.next();
+			
+			encryptPassword(changePassword(password));
+			
+			savePassword(encryptedPassword);
+			
+		}
+		
+	}
+	
+	private static void savePassword(String password) throws IOException {
+		FileWriter fw = new FileWriter("MasterPassword");
+		
+		fw.write(encryptedPassword);
+		
+		System.out.println("Password successully saved to file");
+		
+		fw.close();
+		
+	}
+	
+	private static String changePassword(String newPassword) {
+		System.out.println("New password sucessfully created");
+		return newPassword;
+	}
+	
+	private static void encryptPassword(String password) {
+		StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+		
+		encryptedPassword = passwordEncryptor.encryptPassword(password);
+		
+		System.out.println("New password sucessfully encrypted");
+		
+		created = true;
+	}
+
+}

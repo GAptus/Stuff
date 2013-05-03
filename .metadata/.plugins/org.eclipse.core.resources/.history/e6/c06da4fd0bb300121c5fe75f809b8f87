@@ -1,0 +1,38 @@
+
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+
+class SendMail {
+	public static void main(String[] args) {
+		Properties propsTLS = new Properties();
+		propsTLS.put("mail.transport.protocol", "smtp");
+		propsTLS.put("mail.smtp.host", "smtp.gmail.com");
+		propsTLS.put("mail.smtp.auth", "true");
+		propsTLS.put("mail.smtp.starttls.enable", "true"); // GMail requires
+		
+		
+		Session sessionTLS = Session.getInstance(propsTLS);
+		sessionTLS.setDebug(true);
+			
+		try {
+			Message messageTLS = new MimeMessage(sessionTLS);
+			messageTLS.setFrom(new InternetAddress("me@sender.com"));
+			messageTLS.setRecipient(Message.RecipientType.TO, new InternetAddress("giacomo@aptusinteractive.com"));
+			messageTLS.setSubject("This is a subject");
+			messageTLS.setText("This is some text!");
+			
+			Transport transportTLS = sessionTLS.getTransport();
+			transportTLS.connect("smtp.gmail.com", 587, "giacomo@aptusinteractive.com", "Boggles123");
+			transportTLS.sendMessage(messageTLS,  messageTLS.getAllRecipients());
+			transportTLS.close();
+		}
+		catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}
