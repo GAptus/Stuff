@@ -34,7 +34,7 @@ public class PlayersTest implements Observer  {
 			System.exit(0);
 		}
 		
-		while(running) {
+		while(!enteredPassword) {
 			
 			
 			if (count == 3) {
@@ -182,23 +182,10 @@ public class PlayersTest implements Observer  {
 	}
 	
 	private static String passwordGUI() {
-		JPanel panel = new JPanel();
-		JLabel label = new JLabel("Enter a password: ");
-		JPasswordField pass = new JPasswordField(15);
+	
+		String s = JOptionPane.showInputDialog("Enter master password");
 		
-		panel.add(label);
-		panel.add(pass);
-		
-		String[] options = {"OK", "Cancel"};
-		int option = JOptionPane.showOptionDialog(null, panel, "Master Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		
-		if (option == 0) {
-			char[] password = pass.getPassword();
-			return password.toString();
-		}
-		else {
-			return null;
-		}
+		return s;
 	}
 }
 

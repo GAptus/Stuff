@@ -74,21 +74,22 @@ public class ObservedEmail {
 		BufferedReader masterBR = new BufferedReader(masterReader);
 		
 		String masterPass = masterBR.readLine();
+		FileReader basicFR = new FileReader("EmailPassword");
+		BufferedReader basicBR = new BufferedReader(basicFR);
 		
+		String emailPass = basicBR.readLine();
 		
 		if (strongEncrypt.checkPassword(password, masterPass)) {
 			BasicTextEncryptor basicEncrypt = new BasicTextEncryptor();
 			
-			FileReader basicFR = new FileReader("EmailPassword");
-			BufferedReader basicBR = new BufferedReader(basicFR);
 			
-			String emailPass = basicBR.readLine();
 			
-			basicEncrypt.setPassword("12345");
+			basicEncrypt.setPassword("password");
 			
 			masterBR.close();
 			basicBR.close();
-			return basicEncrypt.decrypt(emailPass);
+			String temp = basicEncrypt.decrypt(emailPass);
+			return temp; 
 		}
 		else {
 			return null;
