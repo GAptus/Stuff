@@ -6,139 +6,143 @@ import javax.swing.*;
 
 public class PlayersTest implements Observer  {
 
-	static League myLeague = new League();
+	static PoolLeague p = new PoolLeagueImpl();
 
 	private static String emailPassword;
 
-	public static void main(String[] args) throws PlayerNotFoundException {
+	public static void main(String[] args) throws PlayerNotFoundException, IOException {
 		
-		
-		
-		Scanner sc = new Scanner(System.in);
-
-		boolean running = true;
-		
-		boolean enteredPassword = false;
-		
-		int count = 0;
-		
-		try {
-			myLeague.initialiseForTesting();
-			
-			myLeague.addObserver(new PlayersTest());
-			
-			
-		}
-		catch (IOException e) {
-			System.out.println("File Missing");
+		if (args.length == 2) {
+			p.playGameCommandLine(args[0], args[1]);
 			System.exit(0);
 		}
-		
-		while(!enteredPassword) { // password entry, 3 tries then program exits
+		else if (args.length == 0) {
+			Scanner sc = new Scanner(System.in);
+	
+			boolean running = true;
 			
+			boolean enteredPassword = false;
 			
-			if (count == 3) {
+			int count = 0;
+			
+			try {
+				p.initialiseForTesting();
+				
+				p.addObserver(new PlayersTest());
+				
+				
+			}
+			catch (IOException e) {
+				System.out.println("File Missing");
 				System.exit(0);
 			}
-			else if (!enteredPassword) {
-				System.out.println("Enter the master password: ");
-				String s = passwordGUI();
-				try {
-					if (ObservedEmail.checkMasterPassword(s) == null) {
-						count++;
+			
+			while(!enteredPassword) { // password entry, 3 tries then program exits
+				
+				
+				if (count == 3) {
+					System.exit(0);
+				}
+				else if (!enteredPassword) {
+					System.out.println("Enter the master password: ");
+					String s = passwordGUI();
+					try {
+						if (ObservedEmail.checkMasterPassword(s) == null) {
+							count++;
+						}
+						else {
+							emailPassword = ObservedEmail.checkMasterPassword(s);
+							enteredPassword = true;
+						}
+					}
+					catch (IOException e) {
+						System.out.println("Error!");
+					}
+				}
+			}
+			
+			while (running) {
+				
+				int temp = 0;
+				System.out.print("Enter 1 to play a game, 2 to print the league table, 3 to add a player, 4 to remove a player or 5 to exit");
+				temp = sc.nextInt();
+				
+				if (temp == 1) { //play a game
+					try {
+						p.playGame();
+					}
+					catch (PlayerNotFoundException e) {
+						System.out.println("One or more of your players cannot be found");
+					}
+					catch (IOException e) {
+						System.out.println("There is something wrong with the file");
+					}
+				}
+				else if (temp == 2) {  // print
+	
+					int response = 0;
+					
+					System.out.println("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most loses");
+					
+					response = sc.nextInt();
+					
+					if (response == 1) {
+						for (String s : p.printArrayLeague()) {
+							System.out.println(s);
+						}
+					}
+					else if (response == 2) {
+						for (String s : p.printArrayByWins()) {
+							System.out.println(s);
+						}
+					}
+					else if (response == 3) {
+						for (String s : p.printArrayByLoses()) {
+							System.out.println(s);
+						}
 					}
 					else {
-						emailPassword = ObservedEmail.checkMasterPassword(s);
-						enteredPassword = true;
+						
 					}
-				}
-				catch (IOException e) {
-					System.out.println("Error!");
-				}
-			}
-		}
-		
-		while (running) {
-			
-			int temp = 0;
-			System.out.print("Enter 1 to play a game, 2 to print the league table, 3 to add a player, 4 to remove a player or 5 to exit");
-			temp = sc.nextInt();
-			
-			if (temp == 1) { //play a game
-				try {
-					myLeague.playGame();
-				}
-				catch (PlayerNotFoundException e) {
-					System.out.println("One or more of your players cannot be found");
-				}
-				catch (IOException e) {
-					System.out.println("There is something wrong with the file");
-				}
-			}
-			else if (temp == 2) {  // print
-
-				int response = 0;
-				
-				System.out.println("Enter 1 to see the league table, 2 to see who has most wins or 3 to see who has most loses");
-				
-				response = sc.nextInt();
-				
-				if (response == 1) {
-					for (String s : myLeague.printArrayLeague()) {
-						System.out.println(s);
-					}
-				}
-				else if (response == 2) {
-					for (String s : myLeague.printArrayByWins()) {
-						System.out.println(s);
-					}
-				}
-				else if (response == 3) {
-					for (String s : myLeague.printArrayByLoses()) {
-						System.out.println(s);
-					}
-				}
-				else {
 					
 				}
-				
-			}
-			else if (temp == 3) {  // add				
-
-				System.out.print("Enter the name of the player ");
-				String tempName = sc.next();
-				
-				System.out.println("Enter the email you wish your notifications to be sent to");
-				String tempEmail = sc.next();
-				
-				try {
-					myLeague.addPlayer(tempName, tempEmail);
+				else if (temp == 3) {  // add				
+	
+					System.out.print("Enter the name of the player ");
+					String tempName = sc.next();
+					
+					System.out.println("Enter the email you wish your notifications to be sent to");
+					String tempEmail = sc.next();
+					
+					try {
+						p.addPlayer(tempName, tempEmail);
+					}
+					catch (IOException e) {
+						System.out.println("There is a problem with the files");
+					}
 				}
-				catch (IOException e) {
-					System.out.println("There is a problem with the files");
+				else if (temp == 4) {   // remove a player
+					String tempName = null;
+					
+					System.out.print("Enter the name of the player ");
+					tempName = sc.next();
+					
+					try {
+						p.removePlayer(tempName);
+					}
+					catch (IOException e) {
+						System.out.println("There is a problem with the files");
+					}
+				}
+				else if (temp == 5) {  // exit
+					System.exit(0);
+				}
+				else {
+					System.out.println("Please enter a valid value");
 				}
 			}
-			else if (temp == 4) {   // remove a player
-				String tempName = null;
-				
-				System.out.print("Enter the name of the player ");
-				tempName = sc.next();
-				
-				try {
-					myLeague.removePlayer(tempName);
-				}
-				catch (IOException e) {
-					System.out.println("There is a problem with the files");
-				}
-			}
-			else if (temp == 5) {  // exit
-				System.exit(0);
-			}
-			else {
-				System.out.println("Please enter a valid value");
-			}
+			sc.close();
 		}
-		sc.close();
 	}
 	
 	@Override
@@ -157,9 +161,9 @@ public class PlayersTest implements Observer  {
 			}
 		
 			try {
-				Player winner = myLeague.findPlayerByName(loserWinner[1]);
+				Player winner = p.findPlayerByName(loserWinner[1]);
 
-				Player loser = myLeague.findPlayerByName(loserWinner[0]);
+				Player loser = p.findPlayerByName(loserWinner[0]);
 
 				String body;
 				

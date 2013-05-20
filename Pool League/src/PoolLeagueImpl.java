@@ -8,12 +8,15 @@ import java.io.*;
  *@version 1.4
  *Class League stores a list of Player objects and provides different methods for handling and sorting them
  */
-public class League extends Observable {
+public class PoolLeagueImpl extends Observable implements PoolLeague {
 	
 
 	private ArrayList<Player> playersList = new ArrayList<Player>();
 	
 	Scanner sc = new Scanner(System.in);
+	
+	
+	
 	/**	Method informObserver
 	 * 
 	 * @param winner Stores a Player object
@@ -216,6 +219,24 @@ public class League extends Observable {
 		
 		saveGames(winner, loser);
 		
+	}
+	/** Method playGameCommandLine
+	 * 
+	 * @param winner
+	 * @param loser
+	 * @throws PlayerNotFoundException
+	 * @throws IOException
+	 * 
+	 * plays a game based on command line arguments
+	 */
+	public void playGameCommandLine(String winner, String loser) throws PlayerNotFoundException, IOException {
+		Player winnerPlayer = findPlayerByName(winner);
+		
+		Player loserPlayer = findPlayerByName(loser);
+		
+		swapPlayerRanks(winnerPlayer, loserPlayer);
+		
+		saveGames(winner, loser);
 	}
 	/**	Method swapPlayerRank
 	 * 
@@ -457,5 +478,10 @@ public class League extends Observable {
 	 */
 	public void sortArray() {
 		Collections.sort(playersList, Players_Losses);
+	}
+	@Override
+	public void addObserver(Observer observer) {
+		super.addObserver(observer);
+		
 	}
 }
