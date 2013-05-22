@@ -1,0 +1,12 @@
+
+  <servlet>
+    <description>Servlet to print out Hello World!</description>
+    <display-name>HelloWorld</display-name>
+    <servlet-name>HelloWorld</servlet-name>
+    <servlet-class>servlets.hello.HelloWorld</servlet-class>
+  </servlet>
+ 
+  <servlet-mapping>
+    <servlet-name>HelloWorld</servlet-name>
+    <url-pattern>/HelloWorldMapping</url-pattern>
+  </servlet-mapping>

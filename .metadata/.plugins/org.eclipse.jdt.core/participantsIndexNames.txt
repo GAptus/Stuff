@@ -1,0 +1,9 @@
+INDEX VERSION 1.126
+/home/giacomo/Hello-World/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3294910954.index
+/Hello-JSP/src
+/home/giacomo/Hello-World/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/357134324.index
+/HelloWorld-Servlet/src
+/home/giacomo/Hello-World/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/882682260.index
+/Guestbook/src
+/home/giacomo/Hello-World/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2406836706.index
+/Hello-JSP/src

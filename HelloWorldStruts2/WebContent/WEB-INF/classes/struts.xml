@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+<constant name="struts.devMode" value="true" />
+   <package name="resizing" extends="struts-default">
+     
+      <action name="growing" 
+            class="resizing.calculator.GrowingAction" 
+            method="execute">
+            <result name="success">/growing.jsp</result>
+      </action>
+      
+      <action name="growingPercent"
+      		class="resizing.calculator.GrowingByPercentageAction"
+      		method="execute">
+      		<result name="success">GrowingByPercent.jsp</result>
+      </action>
+      
+      <action name="shrinkingPercent"
+      		class="resizing.calculator.ShrinkingAction"
+      		method="execute">
+      		<result name="success">Shrinking.jsp</result>		
+      </action>
+   </package>
+</struts>
