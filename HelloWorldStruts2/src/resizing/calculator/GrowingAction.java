@@ -1,6 +1,11 @@
 package resizing.calculator;
 
-public class GrowingAction {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.opensymphony.xwork2.ActionSupport;
+
+public class GrowingAction extends ActionSupport {
 	private Integer width;
 	private int height;
 	private Integer x;
@@ -9,47 +14,39 @@ public class GrowingAction {
 	private Integer changedY;
 	private Integer changedWidth;
 	private Integer changedHeight;
+	private String meta = "";
+	private Integer elementID;
+	private Integer duration;
+	private Integer delay;
 	
-	public String execute() throws Exception {
+	public String execute() throws Exception, JSONException {
 		
 		changedX = x + width/2;
 		changedY = y + height/2;
 		changedWidth = 0;
 		changedHeight = 0;
+
+		System.out.println("help");
+		
+		doSomething();
 		
 		return "success";
 	}
 	
-	public String getChangedX() {
-		return changedX.toString();
+	public void doSomething() {
+		
+		JSONObject myStuff = new JSONObject();
+		try {
+			myStuff.put("element_id", elementID);
+			meta = myStuff.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	public String getChangedY() {
-		return changedY.toString();
-	}
-	
-	public String getChangedWidth() {
-		return changedWidth.toString();
-	}
-	
-	public String getChangedHeight() {
-		return changedHeight.toString();
-	}
-	
-	public String getWidth() {	
-		return width.toString();
-	}
-
-	public String getHeight() {
-		return height + "";
-	}
-
-	public String getX() {
-		return x.toString();
-	}
-
-	public String getY() {
-		return y.toString();
+	public String getMeta() {
+		return meta;
 	}
 
 	public void setWidth(String width) {
@@ -68,5 +65,15 @@ public class GrowingAction {
 		this.y = Integer.parseInt(y);
 	}
 	
+	public void setElementID(String elementID) {
+		this.elementID = Integer.parseInt(elementID);
+	}
 	
+	public void setDuration(String duration) {
+		this.duration = Integer.parseInt(duration);
+	}
+	
+	public void setDelay(String delay) {
+		this.delay = Integer.parseInt(delay);
+	}
 }

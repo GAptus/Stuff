@@ -41,5 +41,8 @@
 	<td>y: </td><td><s:property value="changedY"/></td>
 	</tr>
 	</table>
+	<br/>
+	<br/>
+	<a href="index.jsp">return</a>
 </body>
 </html>

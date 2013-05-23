@@ -12,19 +12,28 @@
    <br/>
    <h3>Growing from 0 size</h3>
    <form action="growing">
-      <table>
-      <tr>
-      	<td>Width: </td><td><input type="text" name="width"/></td>
-      </tr>
-      <tr>
-      	<td>Height: </td><td><input type="text" name="height"/></td>
-      </tr>
-      <tr>
-      	<td>X: </td><td><input type="text" name="x"/></td>
-      </tr>
-      <tr>
-      	<td>Y: </td><td><input type="text" name="y"/></td>
-      </tr>
+     <table>
+	      <tr>
+	      	<td>Width: </td><td><input type="text" name="width"/></td>
+	      </tr>
+	      <tr>
+	      	<td>Height: </td><td><input type="text" name="height"/></td>
+	      </tr>
+	      <tr>
+	      	<td>X: </td><td><input type="text" name="x"/></td>
+	      </tr>
+	      <tr>
+	      	<td>Y: </td><td><input type="text" name="y"/></td>
+	      </tr>
+	      <tr>
+	      	<td>Element_ID</td><td><input type="text" name="elementID" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Duration</td><td><input type="text" name="duration" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Delay</td><td><input type="text" name="delay" /></td>
+	      </tr>
       </table>
       <input type="submit" />
    </form>

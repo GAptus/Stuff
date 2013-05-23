@@ -7,8 +7,8 @@ public class ShrinkingAction {
 	private int height;
 	private Integer x;
 	private Integer y;
-	private Integer changedX;
-	private Integer changedY;
+	private Double changedX;
+	private Double changedY;
 	private Double changedWidth;
 	private Double changedHeight;
 	private Double percentage;
@@ -17,10 +17,10 @@ public class ShrinkingAction {
 	
 	public String execute() {
 		
-		changedX = x;
-		changedY = y;
 		changedWidth = (double)width*(1.0-(percentage/100));
 		changedHeight = (double)height*(1-(percentage/100));
+		changedX = (x + ((width - changedWidth)/2));
+		changedY = (y + ((height - changedHeight) /2));
 		
 		return "success";
 	}
@@ -30,11 +30,11 @@ public class ShrinkingAction {
 	}
 	
 	public String getChangedX() {
-		return changedX.toString();
+		return formater.format(changedX).toString();
 	}
 	
 	public String getChangedY() {
-		return changedY.toString();
+		return formater.format(changedY).toString();
 	}
 	
 	public String getChangedWidth() {

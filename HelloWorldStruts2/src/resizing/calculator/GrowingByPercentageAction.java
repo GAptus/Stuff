@@ -7,8 +7,8 @@ public class GrowingByPercentageAction {
 	private int height;
 	private Integer x;
 	private Integer y;
-	private Integer changedX;
-	private Integer changedY;
+	private Double changedX;
+	private Double changedY;
 	private Double changedWidth;
 	private Double changedHeight;
 	private Double percentage;
@@ -17,10 +17,10 @@ public class GrowingByPercentageAction {
 	
 	public String execute() {
 		
-		changedX = x;
-		changedY = y;
 		changedWidth = width*(1+(percentage/100));
 		changedHeight = height*(1+(percentage/100));
+		changedX = (x - ((changedWidth - width)/2));
+		changedY = (y - ((changedHeight - height)/2));
 		
 		return "success";
 	}
@@ -30,11 +30,11 @@ public class GrowingByPercentageAction {
 	}
 	
 	public String getChangedX() {
-		return changedX.toString();
+		return formater.format(changedX).toString();
 	}
 	
 	public String getChangedY() {
-		return changedY.toString();
+		return formater.format(changedY).toString();
 	}
 	
 	public String getChangedWidth() {
