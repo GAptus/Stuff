@@ -2,63 +2,71 @@ package resizing.calculator;
 
 import java.text.DecimalFormat;
 
+import org.json.JSONException;
+
 public class ShrinkingAction {
 	private Integer width;
-	private int height;
+	private Integer height;
 	private Integer x;
 	private Integer y;
-	private Double changedX;
-	private Double changedY;
-	private Double changedWidth;
-	private Double changedHeight;
+	private Integer changedX;
+	private Integer changedY;
+	private Integer changedWidth;
+	private Integer changedHeight;
 	private Double percentage;
+	private String meta;
+	private Integer elementID;
+	private Integer duration;
+	private Integer delay;
 	
 	DecimalFormat formater = new DecimalFormat("#");
 	
 	public String execute() {
 		
-		changedWidth = (double)width*(1.0-(percentage/100));
-		changedHeight = (double)height*(1-(percentage/100));
-		changedX = (x + ((width - changedWidth)/2));
-		changedY = (y + ((height - changedHeight) /2));
+		doCalculations();
+		
+		try {
+			meta = JSONBuilder.buildContainer(JSONBuilder.buildAction(elementID, changedX, changedY, changedWidth, changedHeight, duration, delay)).toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
 		return "success";
+	}
+	
+	public void doCalculations() {
+		double temp = width*(1.0-(percentage/100));
+		changedWidth = (int)temp;
+		temp = height*(1-(percentage/100));
+		changedHeight = (int)temp;
+		temp = (x + ((width - changedWidth)/2));
+		changedX = (int)temp;
+		temp = (y + ((height - changedHeight) /2));
+		changedY = (int)temp;
+	}
+	
+	public String getMeta() {
+		return meta;
 	}
 	
 	public String getPercentage() {
 		return formater.format(percentage).toString();
 	}
 	
-	public String getChangedX() {
-		return formater.format(changedX).toString();
-	}
-	
-	public String getChangedY() {
-		return formater.format(changedY).toString();
-	}
-	
-	public String getChangedWidth() {
-		return formater.format(changedWidth).toString();
-	}
-	
-	public String getChangedHeight() {
-		return formater.format(changedHeight).toString();
-	}
-	
-	public String getWidth() {	
-		return width.toString();
-	}
-
-	public String getHeight() {
-		return height + "";
-	}
-
 	public String getX() {
 		return x.toString();
 	}
-
+	
 	public String getY() {
 		return y.toString();
+	}
+	
+	public String getWidth() {
+		return width.toString();
+	}
+	
+	public String getHeight() {
+		return height.toString();
 	}
 	
 	public void setPercentage(String percentage) {
@@ -79,5 +87,17 @@ public class ShrinkingAction {
 	
 	public void setY(String y) {
 		this.y = Integer.parseInt(y);
+	}
+	
+	public void setElementID(String elementID) {
+		this.elementID = Integer.parseInt(elementID);
+	}
+	
+	public void setDuration(String duration) {
+		this.duration = Integer.parseInt(duration);
+	}
+	
+	public void setDelay(String delay) {
+		this.delay = Integer.parseInt(delay);
 	}
 }

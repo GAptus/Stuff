@@ -1,8 +1,6 @@
 package resizing.calculator;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.opensymphony.xwork2.ActionSupport;
 
 public class GrowingAction extends ActionSupport {
@@ -14,35 +12,47 @@ public class GrowingAction extends ActionSupport {
 	private Integer changedY;
 	private Integer changedWidth;
 	private Integer changedHeight;
-	private String meta = "";
+	private String meta;
 	private Integer elementID;
 	private Integer duration;
 	private Integer delay;
 	
-	public String execute() throws Exception, JSONException {
+	public String execute() throws Exception{
 		
-		changedX = x + width/2;
-		changedY = y + height/2;
-		changedWidth = 0;
-		changedHeight = 0;
+		doCalculations();
 
 		System.out.println("help");
 		
-		doSomething();
-		
-		return "success";
-	}
-	
-	public void doSomething() {
-		
-		JSONObject myStuff = new JSONObject();
 		try {
-			myStuff.put("element_id", elementID);
-			meta = myStuff.toString();
+			meta = JSONBuilder.buildContainer(JSONBuilder.buildAction(elementID, x, y, width, height, duration, delay)).toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
+		return "success";
+	}
+	
+	public void doCalculations() {
+		changedX = x + width/2;
+		changedY = y + height/2;
+		changedWidth = 0;
+		changedHeight = 0;
+	}
+	
+	public String getChangedX() {
+		return changedX.toString();
+	}
+	
+	public String getChangedY() {
+		return changedY.toString();
+	}
+	
+	public String getChangedWidth() {
+		return changedWidth.toString();
+	}
+	
+	public String getChangedHeight() {
+		return changedHeight.toString();
 	}
 	
 	public String getMeta() {
