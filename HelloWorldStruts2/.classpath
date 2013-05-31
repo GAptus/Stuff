@@ -71,7 +71,6 @@
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/org.apache.felix.bundlerepository-1.2.1.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/ognl-3.0.6.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/juli-6.0.18.jar"/>
-	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/jackson-mapper-asl-1.9.2.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/jackson-core-asl-1.9.2.jar"/>
@@ -97,6 +96,10 @@
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/asm-3.3.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="/home/giacomo/struts-2.3.14/lib/antlr-2.7.2.jar"/>
-	<classpathentry kind="lib" path="/home/giacomo/Downloads/json-20090211.jar"/>
+	<classpathentry kind="lib" path="/home/giacomo/Downloads/json-20090211.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
