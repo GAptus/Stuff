@@ -56,6 +56,15 @@
       <tr>
       	<td>Percentage:</td><td><input type="text" name="percentage" /></td>
       </tr>
+        <tr>
+	      	<td>Element_ID</td><td><input type="text" name="elementID" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Duration</td><td><input type="text" name="duration" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Delay</td><td><input type="text" name="delay" /></td>
+	      </tr>
       </table>
       <input type="submit" />
    </form>
@@ -78,6 +87,15 @@
       <tr>
       	<td>Percentage:</td><td><input type="text" name="percentage" /></td>
       </tr>
+        <tr>
+	      	<td>Element_ID</td><td><input type="text" name="elementID" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Duration</td><td><input type="text" name="duration" /></td>
+	      </tr>
+	      <tr>
+	      	<td>Delay</td><td><input type="text" name="delay" /></td>
+	      </tr>
       </table>
       <input type="submit" />
    </form>
