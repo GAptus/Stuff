@@ -49,6 +49,10 @@ public class GrowingByPercentageAction {
 		return meta;
 	}
 	
+	public String getPercentage() {
+		return percentage.toString();
+	}
+	
 	public String getWidth() {	
 		return width.toString();
 	}
