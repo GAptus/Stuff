@@ -58,7 +58,7 @@ public class GrowingByPercentageAction {
 	}
 
 	public String getHeight() {
-		return height + "";
+		return height.toString();
 	}
 
 	public String getX() {
