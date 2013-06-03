@@ -11,6 +11,8 @@ public class CreateMetaAction {
 	private Integer y;
 	private Integer width;
 	private Integer height;
+	private Integer originalWidth;
+	private Integer originalHeight;
 	
 	private Integer changedX;
 	private Integer changedY;
@@ -88,7 +90,7 @@ public class CreateMetaAction {
 					changedY = y + (height/2);
 					
 					try {
-						table1JSON = growObjectFromZero(elementID, x, y, width, height, durationTable1, delayTable1, percentageTable1);
+						table1JSON = growObjectFromZero(elementID, x, y, originalWidth, originalHeight, durationTable1, delayTable1, percentageTable1);
 					} 
 					catch (JSONException e) {
 						e.printStackTrace();
@@ -150,7 +152,7 @@ public class CreateMetaAction {
 					tempHeight = height;
 					
 					try {
-						growObjectFromZero(elementID, (int)tempX, (int)tempY, (int)tempWidth, (int)tempHeight, durationTable2, delayTable2, percentageTable2);
+						growObjectFromZero(elementID, (int)tempX, (int)tempY, originalWidth, originalHeight, durationTable2, delayTable2, percentageTable2);
 					} 
 					catch (JSONException e) {
 						e.printStackTrace();
@@ -201,12 +203,8 @@ public class CreateMetaAction {
 				}
 				else if (resizingOptionTable3.equals("GrowingFromZero")) {
 					System.out.println("growing from zero! table3");
-					changedWidth = 0;
-					changedHeight = 0;
-					changedX = x + ((int)tempWidth/2);
-					changedY = y + ((int)tempHeight/2);
 					try {
-						table3JSON = growObjectFromZero(elementID, (int)tempX, (int)tempY, (int)tempWidth, (int)tempHeight, durationTable3, delayTable3, percentageTable3);
+						table3JSON = growObjectFromZero(elementID, (int)tempX, (int)tempY, originalWidth, originalHeight, durationTable3, delayTable3, percentageTable3);
 					} 
 					catch (JSONException e) {
 						e.printStackTrace();
@@ -262,68 +260,57 @@ public class CreateMetaAction {
 					changedX = x + ((int)tempWidth/2);
 					changedY = y + ((int)tempHeight/2);
 					try {
-						table4JSON = growObjectFromZero(elementID, (int)tempX, (int)tempY, (int)tempWidth, (int)tempHeight, durationTable4, delayTable4, percentageTable4);
+						table4JSON = growObjectFromZero(elementID, (int)tempX, (int)tempY, originalWidth, originalHeight, durationTable4, delayTable4, percentageTable4);
 					} 
 					catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
 			}
+		
+
+		JSONObject temp = new JSONObject();
 			
-			JSONObject temp = new JSONObject();
+		if (!table1JSON.toString().equals("{}")) {
+			if (!table4JSON.toString().equals("{}") && !table3JSON.toString().equals("{}") && !table2JSON.toString().equals("{}") && !table1JSON.toString().equals("{}")) {
+				try {
+					temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON
+											, JSONBuilder.buildAction(table2JSON
+											, JSONBuilder.buildAction(table3JSON
+											, table4JSON))));
+				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+				
+			else if (!table3JSON.toString().equals("{}") && !table2JSON.toString().equals("{}") && !table1JSON.toString().equals("{}")) {
+				try {
+					temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON
+											, JSONBuilder.buildAction(table2JSON, table3JSON)));
+				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
 			
-			if (!table1JSON.equals("")) {
-				if (!table4JSON.equals("")) {
-					if (!table3JSON.equals("")) {
-						try {
-							if (!table2JSON.equals("")) {
-								if (!table1JSON.equals("")) {
-									temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON
-															, JSONBuilder.buildAction(table2JSON
-															, JSONBuilder.buildAction(table3JSON
-															, table4JSON))));
-								}
-							}
-						}
-						catch (JSONException e) {
-							e.printStackTrace();
-						}
+			else if (!table2JSON.toString().equals("{}") && !table1JSON.toString().equals("{}")) {
+				try {
+					temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON, table2JSON));
 				}
-					
-				else if (!table3JSON.equals("")) {
-					if (!table2JSON.equals("")) {
-						if (!table1JSON.equals("")) {
-							try {
-								temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON
-														, JSONBuilder.buildAction(table2JSON, table3JSON)));
-							}
-							catch (JSONException e) {
-								e.printStackTrace();
-							}
-						}
-					}
+				catch (JSONException e) {
+					e.printStackTrace();
 				}
-				
-				else if (!table2JSON.equals("")) {
-					if (!table1JSON.equals("")) {
-						try {
-							temp = JSONBuilder.buildContainer(JSONBuilder.buildAction(table1JSON, table2JSON));
-						}
-						catch (JSONException e) {
-							e.printStackTrace();
-						}
-					}
+			}
+			
+			else {
+				try {
+					JSONArray array = new JSONArray();
+					table1JSON.put("actions", array);
+					temp = JSONBuilder.buildContainer(table1JSON);
 				}
-				
-				else if (!table1JSON.equals("")) {
-					try {
-						JSONArray array = new JSONArray();
-						table1JSON.put("actions", array);
-						temp = JSONBuilder.buildContainer(table1JSON);
-					}
-					catch (JSONException e) {
-						e.printStackTrace();
-					}
+				catch (JSONException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -350,19 +337,19 @@ public class CreateMetaAction {
 												, (int)growObjectHeight(height, percentage), duration, delay);
 	}
 	
-	public double growObjectWidth(int width, double percentage) {
+	private double growObjectWidth(int width, double percentage) {
 		return width * (1  + (percentage / 100));
 	}
 	
-	public double growObjectHeight(int height, double percentage) {
+	private double growObjectHeight(int height, double percentage) {
 		return height * (1 + (percentage / 100));
 	}
 	
-	public double growObjectX(int x, int width, double percentage) {
+	private double growObjectX(int x, int width, double percentage) {
 		return x - (((int)growObjectWidth(width, percentage) - width) / 2);
 	}
 	
-	public double growObjectY(int y, int height, double percentage) {
+	private double growObjectY(int y, int height, double percentage) {
 		return y - (((int)growObjectHeight(height, percentage) - height) / 2);
 	}
 	
@@ -374,23 +361,32 @@ public class CreateMetaAction {
 												, (int)shrinkObjectHeight(height, percentage), duration, delay);	
 	}
 	
-	public double shrinkObjectWidth(int width, double percentage) {
+	private double shrinkObjectWidth(int width, double percentage) {
 		return width * (1 - (percentage / 100));
 	}
 	
-	public double shrinkObjectHeight(int height, double percentage) {
+	private double shrinkObjectHeight(int height, double percentage) {
 		return height * (1 - (percentage / 100));
 	}
 	
-	public double shrinkObjectX(int x, int width, double percentage) {
+	private double shrinkObjectX(int x, int width, double percentage) {
 		return x + ((width - (int)shrinkObjectWidth(width, percentage)) / 2);
 	}
 	
-	public double shrinkObjectY(int y, int height, double percentage) {
+	private double shrinkObjectY(int y, int height, double percentage) {
 		return y + ((height - (int)shrinkObjectHeight(height, percentage)) / 2);
 	}
 	
 	public JSONObject growObjectFromZero(int elementID, int x, int y, int width, int height, int duration, int delay, double percentage) throws JSONException {
+		if (percentage > 100) {
+			width = width * (1 + ((int)percentage / 100));
+		}
+		else if (percentage == 100) {
+			
+		}
+		else if (percentage < 100) {
+			width = width * (1 - ((int)percentage / 100));
+		}
 		return JSONBuilder.buildAction(elementID, x, y, width, height, duration, delay);
 	}
 	
@@ -434,6 +430,13 @@ public class CreateMetaAction {
 		this.height = Integer.parseInt(height);
 	}
 
+	public void setOriginalWidth(String originalWidth) {
+		this.originalWidth = Integer.parseInt(originalWidth);
+	}
+	
+	public void setOriginalHeight(String originalHeight) {
+		this.originalHeight = Integer.parseInt(originalHeight);
+	}
 	
 	public void setPercentageTable1(String percentageTable1) {
 		this.percentageTable1 = Double.parseDouble(percentageTable1);
