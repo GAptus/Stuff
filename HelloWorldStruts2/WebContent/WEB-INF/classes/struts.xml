@@ -4,7 +4,7 @@
    "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 <constant name="struts.devMode" value="true" />
-   <package name="resizing" extends="struts-default">
+   <package name="resizing" namespace="/" extends="struts-default">
      
       <action name="growing" 
             class="resizing.calculator.GrowingAction" 
@@ -21,7 +21,7 @@
        <action name="doActions"
    			class="resizing.calculator.CreateMetaAction"
    			method="execute">
-   			<result name="sucess">growing.jsp</result>
+   			<result name="success">/home.jsp</result>
       </action>	
       
       <action name="shrinkingPercent"

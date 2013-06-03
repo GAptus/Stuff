@@ -18,10 +18,8 @@ public class JSONBuilder {
 	}
 	
 	public static JSONObject buildAction(int elementID, int x, int y, int width, int height, int duration, int delay) throws JSONException {
-		JSONArray array = new JSONArray();
 		JSONObject actionMeta = new JSONObject();
-		
-		actionMeta.put("actions", array);
+
 		actionMeta.put("type", "ANIMATE");
 		actionMeta.put("element_id", elementID);
 		actionMeta.put("exclude", "");
@@ -45,12 +43,8 @@ public class JSONBuilder {
 	}
 	
 	public static JSONObject buildAction(int elementID, int x, int y, int width, int height, int duration, int delay, JSONObject o) throws JSONException {
-		JSONArray array = new JSONArray();
 		JSONObject actionMeta = new JSONObject();
 		
-		array.put(o);
-		
-		actionMeta.put("actions", array);
 		actionMeta.put("type", "ANIMATE");
 		actionMeta.put("element_id", elementID);
 		actionMeta.put("exclude", "");
@@ -71,5 +65,14 @@ public class JSONBuilder {
 		actionMeta.put("loop", "");
 		
 		return actionMeta;
+	}
+	
+	public static JSONObject buildAction(JSONObject container, JSONObject o) throws JSONException {
+		JSONArray array = new JSONArray();
+		
+		array.put(o);
+		
+		container.put("actions", array);
+		return container;
 	}
 }

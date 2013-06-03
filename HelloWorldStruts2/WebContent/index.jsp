@@ -28,12 +28,6 @@
 			<tr>
 				<td>Height</td><td><input type="text" name="height"/></td>
 			</tr>
-			<tr>
-				<td>Duration</td><td><input type="text" name="duration"/></td>
-			</tr>
-			<tr>
-				<td>Delay</td><td><input type="text" name="delay"/></td>
-			</tr>
 		</table>
 		<br/>
 		<hr>
@@ -45,9 +39,11 @@
 			</tr>
 			<tr>
 				<td>Percentage</td><td><input type="text" name="percentageTable1"/></td>
+				<td>Delay</td><td><input type="text" name="delayTable1"/></td>
+				<td>Duration</td><td><input type="text" name="durationTable1"/></td>
 			</tr>	
 			<tr>
-				<td>Ignore</td><td><input type="checkbox" name="ignoreTable1" value="checked"/></td>
+				<td>Untick to Ignore</td><td><input type="checkbox" name="ignoreTable1" value="checked" checked/></td>
 			</tr>
 		</table>
 		<hr>	
@@ -59,9 +55,11 @@
 			</tr>
 			<tr>
 				<td>Percentage</td><td><input type="text" name="percentageTable2"/></td>
+				<td>Delay</td><td><input type="text" name="delayTable2"/></td>
+				<td>Duration</td><td><input type="text" name="durationTable2"/></td>
 			</tr>	
 			<tr>
-				<td>Ignore</td><td><input type="checkbox" name="ignoreTable2" value="checked"/></td>
+				<td>Untick to Ignore</td><td><input type="checkbox" name="ignoreTable2" value="checked" checked/></td>
 			</tr>
 		</table>
 		<hr>
@@ -73,9 +71,11 @@
 			</tr>
 			<tr>
 				<td>Percentage</td><td><input type="text" name="percentageTable3"/></td>
+				<td>Delay</td><td><input type="text" name="delayTable3"/></td>
+				<td>Duration</td><td><input type="text" name="durationTable3"/></td>
 			</tr>	
 			<tr>
-				<td>Ignore</td><td><input type="checkbox" name="ignoreTable3" value="checked"/></td>
+				<td>Untick to Ignore</td><td><input type="checkbox" name="ignoreTable3" value="checked" checked/></td>
 			</tr>
 		</table>
 		<hr>
@@ -87,9 +87,11 @@
 			</tr>
 			<tr>
 				<td>Percentage</td><td><input type="text" name="percentageTable4"/></td>
+				<td>Delay</td><td><input type="text" name="delayTable4"/></td>
+				<td>Duration</td><td><input type="text" name="durationTable4"/></td>				
 			</tr>	
 			<tr>
-				<td>Ignore</td><td><input type="checkbox" name="ignoreTable4" value="checked"/></td>
+				<td>Untick to Ignore</td><td><input type="checkbox" name="ignoreTable4" value="checked" checked/></td>
 			</tr>
 		</table>	
 		<br/>
